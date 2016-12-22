@@ -186,11 +186,41 @@ function createLocationCountChart(chartId) {
                 drilldown: function (e) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
                     console.log("DRILL DOWN");
+                    data = [{
+                            name: 'Things',
+                            colorByPoint: true,
+                            data: [{
+                                    name: 'Animals',
+                                    y: 5
+                                }, {
+                                    name: 'Fruits',
+                                    y: 2
+                                }, {
+                                    name: 'Cars',
+                                    y: 4
+                                }]
+                        }];
+                    createRoleCountChart("get-role-count", data);
 //                    alert("DRILL DOWN ALERT");
                 },
                 drillup: function (e) {
                     chart.setTitle({text: defaultTitle});
                     console.log("DRILL UP");
+                    data = [{
+                            name: 'Things',
+                            colorByPoint: true,
+                            data: [{
+                                    name: 'Animals2',
+                                    y: 5
+                                }, {
+                                    name: 'Fruits3',
+                                    y: 2
+                                }, {
+                                    name: 'Cars4',
+                                    y: 4
+                                }]
+                        }];
+                    createRoleCountChart("get-role-count", data);
 //                    alert("DRILL UP ALERT");
                 },
                 click: function (e) {
@@ -305,9 +335,7 @@ function createLocationCountChart(chartId) {
     });
 }
 
-function createRoleCountChart(chartId) {
-    var defaultTitle = "Basic drilldown";
-    var drilldownTitle = "More about ";
+function createRoleCountChart(chartId, data) {
 
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
@@ -320,19 +348,11 @@ function createRoleCountChart(chartId) {
             spacingBottom: 45,
             spacingTop: 45,
             spacingLeft: 15,
-            spacingRight: 15,
-            events: {
-                drilldown: function (e) {
-                    chart.setTitle({text: drilldownTitle + e.point.name});
-                },
-                drillup: function (e) {
-                    chart.setTitle({text: defaultTitle});
-                }
-            }
+            spacingRight: 15
         },
         credits: false,
         title: {
-            text: defaultTitle
+            text: 'Overall Role Count'
         },
         xAxis: {
             type: 'category'
@@ -344,73 +364,12 @@ function createRoleCountChart(chartId) {
             series: {
                 borderWidth: 0,
                 dataLabels: {
-                    enabled: true,
+                    enabled: true
                 }
             }
         },
-        series: [{
-                name: 'Things',
-                colorByPoint: true,
-                data: [{
-                        name: 'Animals',
-                        y: 5,
-                        drilldown: 'animals'
-                    }, {
-                        name: 'Fruits',
-                        y: 2,
-                        drilldown: 'fruits'
-                    }, {
-                        name: 'Cars',
-                        y: 4,
-                        drilldown: 'cars'
-                    }]
-            }],
-        drilldown: {
-            drillUpButton: {
-                relativeTo: 'spacingBox',
-                position: {
-                    y: 0,
-                    x: 0,
-                    align: 'left',
-                    verticalAlign: 'top'
-                },
-                theme: {
-                    fill: 'white',
-                    stroke: '#303f9f',
-                    states: {
-                        hover: {
-                            fill: '#C5CAE9',
-//                            stroke: 'transparent'
-                        }
-                    }
-                }
-
-            },
-            series: [{
-                    id: 'animals',
-                    data: [
-                        ['Cats', 4],
-                        ['Dogs', 2],
-                        ['Cows', 1],
-                        ['Sheep', 2],
-                        ['Pigs', 1]
-                    ]
-                }, {
-                    id: 'fruits',
-                    data: [
-                        ['Apples', 4],
-                        ['Oranges', 2]
-                    ]
-                }, {
-                    id: 'cars',
-                    data: [
-                        ['Toyota', 4],
-                        ['Opel', 2],
-                        ['Volkswagen', 2]
-                    ]
-                }]
-        }
-    })
+        series: data
+    });
 }
 
 function updateValuetoAjax(key, value) {
@@ -424,6 +383,7 @@ function updateValuetoAjax(key, value) {
         makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, value);
     }
 }
+
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
     $.ajax({
         type: "POST",
