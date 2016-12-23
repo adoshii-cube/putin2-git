@@ -313,6 +313,7 @@ function createLocationCountChart(chartId) {
             }
         },
         series: [{
+//                RASHMI
                 name: 'Overview',
                 colorByPoint: true,
                 data: [{
