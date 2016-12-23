@@ -1061,6 +1061,14 @@ div .mdl-textfield__label:after {
     margin: 0 auto;
 }
 
+.mdl-data-table td div{
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 /*AXIS*/
 
 @media screen and (max-width: 767px){

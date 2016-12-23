@@ -3,12 +3,26 @@
     Created on : 15 Dec, 2016, 4:54:27 PM
     Author     : adoshi
 --%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="java.util.GregorianCalendar"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%--<%@page import="java.util.Calendar"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>--%>
+<%@page import="org.icube.dashboard.DashboardHelper"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.icube.candidate.Candidate"%>
 <%@page import="org.icube.helper.MasterListHelper"%>
 <%@page import="org.icube.candidate.CandidateHelper"%>
+<%--<%@page import="org.json.JSONArray"%>--%>
+<%--<%@page import="org.json.JSONObject"%>--%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,8 +56,6 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-        <!--        <script src="js/highcharts.js"></script>
-                <script src="js/drilldown.src.js"></script>-->
 
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <!--<script src="https://code.highcharts.com/modules/data.js"></script>-->
@@ -84,7 +96,42 @@
                     <div class="page-content">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
-                                <div id="get-candidates-per-month"></div>
+                                <div id="get-candidates-per-month">
+                                    <%
+                                        DashboardHelper dh = new DashboardHelper();
+                                        Map<java.util.Date, Integer> candidateCountMap = dh.getCandidatesByMonth();
+
+                                        //CREATE JSON ARRAY                               
+                                        JSONArray jArray = new JSONArray();
+                                        for (Date d : candidateCountMap.keySet()) {
+                                            Calendar calendar = new GregorianCalendar();
+                                            calendar.setTime(d);
+
+                                            //EXTRACT DATE FROM JAVA INTO CALENDAR OBJECT
+                                            int year = calendar.get(Calendar.YEAR);
+                                            System.out.println("YEAR = " + year);
+                                            int month = calendar.get(Calendar.MONTH);
+                                            System.out.println("MONTH = " + month);
+                                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                                            System.out.println("DAY = " + day);
+                                            int count = candidateCountMap.get(d);
+                                            System.out.println("COUNT = " + count);
+
+                                            //CONVERT DATE TO JSONARRAY
+                                            JSONObject jObj = new JSONObject();
+                                            jObj.put("year", year);
+                                            jObj.put("month", month);
+                                            jObj.put("day", day);
+                                            jObj.put("count", count);
+                                            jArray.put(jObj);
+                                            
+                                            System.out.println("jsonObject :::::::::::" + jObj);
+                                        }
+                                        
+                                        System.out.println("jArray :::::::::::" + jArray);
+                                    %>
+                                    <input type="hidden" id="object" value='<%=jArray%>'/>
+                                </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
                                 <div id="get-location-count"></div>
@@ -96,8 +143,7 @@
                     </div>
                 </section>
                 <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-                    <%
-                        MasterListHelper mlh = new MasterListHelper();
+                    <%                        MasterListHelper mlh = new MasterListHelper();
                         Map<Integer, String> regionMaster = mlh.getRegionMasterList();
                         Map<Integer, String> circleMaster = mlh.getCircleMasterList();
                         Map<Integer, String> cityMaster = mlh.getCityMasterList();
@@ -185,58 +231,61 @@
                             <table class="mdl-data-table mdl-js-data-table">
                                 <thead>
                                     <tr>
-                                        <th class="mdl-data-table__cell--non-numeric">Name</th>
-                                        <th class="mdl-data-table__cell--non-numeric">Role</th>
-                                        <th class="mdl-data-table__cell--non-numeric">City</th>
-                                        <th>Mobile Number</th>
-                                        <th class="mdl-data-table__cell--non-numeric">Email</th>
+                                        <td class="mdl-data-table__cell--non-numeric">Name</td>
+                                        <td class="mdl-data-table__cell--non-numeric">Role</td>
+                                        <td class="mdl-data-table__cell--non-numeric">City</td>
+                                        <td>Mobile Number</td>
+                                        <td class="mdl-data-table__cell--non-numeric">Email</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <%for (Candidate c : candidateList) {%>
                                     <tr>
-                                        <th class="mdl-data-table__cell--non-numeric"><%=c.getName()%></th>
-                                        <th class="mdl-data-table__cell--non-numeric"><%=c.getRole()%></th>
-                                        <th class="mdl-data-table__cell--non-numeric"><%=c.getCity()%></th>
-                                        <th><%=c.getMobileNumber()%></th>
-                                        <th class="mdl-data-table__cell--non-numeric"><%=c.getEmailId()%></th>
+                                        <td class="mdl-data-table__cell--non-numeric" id="tt3-<%=c.getName()%>"><%=c.getName()%></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><div><%=c.getRole()%></div></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><div><%=c.getCity()%></div></td>
+                                        <td><div><%=c.getMobileNumber()%></div></td>
+                                        <td class="mdl-data-table__cell--non-numeric"><div><%=c.getEmailId()%></div></td>
                                     </tr>
-                                    <%}%>
-                                    <!--<tr>-->
-                                    <!--<td class="mdl-data-table__cell--non-numeric">John Lennon</td>-->
-                                    <!--<td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>-->
-                                    <!--<td class="mdl-data-table__cell--non-numeric">New Delhi</td>-->
-                                    <!--<td>98202 98202</td>-->
-                                    <!--<td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>-->
-                                    <!--</tr>-->
-                                    <!--                                    <tr>
-                                                                            <td class="mdl-data-table__cell--non-numeric">John Lennon</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">New Delhi</td>
-                                                                            <td>98202 98202</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Business Development Executive</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Bengaluru</td>
-                                                                            <td>98022 98022</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">paul@mccartney.com</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Manager</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Chennai</td>
-                                                                            <td>98980 98980</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">george@harrison.com</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">Mumbai</td>
-                                                                            <td>98798 98798</td>
-                                                                            <td class="mdl-data-table__cell--non-numeric">ringo@starr.com</td>
-                                                                        </tr>-->
+                                <div class="mdl-tooltip" data-mdl-for="tt3-<%=c.getName()%>">
+                                    <%=c.getName()%>
+                                </div>
+                                <%}%>
+                                <!--<tr>-->
+                                <!--<td class="mdl-data-table__cell--non-numeric">John Lennon</td>-->
+                                <!--<td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>-->
+                                <!--<td class="mdl-data-table__cell--non-numeric">New Delhi</td>-->
+                                <!--<td>98202 98202</td>-->
+                                <!--<td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>-->
+                                <!--</tr>-->
+                                <!--                                    <tr>
+                                                                        <td class="mdl-data-table__cell--non-numeric">John Lennon</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">New Delhi</td>
+                                                                        <td>98202 98202</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Business Development Executive</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Bengaluru</td>
+                                                                        <td>98022 98022</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">paul@mccartney.com</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Manager</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Chennai</td>
+                                                                        <td>98980 98980</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">george@harrison.com</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">Mumbai</td>
+                                                                        <td>98798 98798</td>
+                                                                        <td class="mdl-data-table__cell--non-numeric">ringo@starr.com</td>
+                                                                    </tr>-->
                                 </tbody>
                             </table>
                         </div>

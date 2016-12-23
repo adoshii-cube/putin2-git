@@ -104,9 +104,14 @@ $('#dropdown_role').on('change', function () {
 });
 
 function createCandidatesPerMonthChart(chartId) {
+
+    var obj = $('#object').val();
+    console.log("obj::: " + obj);
+    var jsonObj = $.parseJSON(obj);
+    console.log("jsonObj::: " + jsonObj);
     Highcharts.chart(chartId, {
         chart: {
-            type: 'column',
+            zoomType: 'x',
             style: {
                 fontFamily: 'Roboto'
             },
@@ -116,39 +121,22 @@ function createCandidatesPerMonthChart(chartId) {
             spacingRight: 15
         },
         credits: false,
-        colors: ['#303f9f'],
-        legend: {
-            enabled: false
-        },
         title: {
-            text: 'Candidate Applications per Month'
+            text: 'Candidate Applications Per Month'
         },
-        subtitle: {
-            text: 'Source: Hirecraft'
-        },
+//        subtitle: {
+//            text: document.ontouchstart === undefined ?
+//                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+//        },
         xAxis: {
-            categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-            ],
-            crosshair: true
+            type: 'datetime'
         },
         yAxis: {
-            min: 0,
             title: {
-                text: 'Number of Applications'
+                text: '# of Applications per month'
             }
         },
+        colors: ['#303f9f'],
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -157,23 +145,31 @@ function createCandidatesPerMonthChart(chartId) {
             shared: true,
             useHTML: true
         },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        scrollbar: {
+        legend: {
             enabled: false
         },
         series: [{
-                name: 'Number of Applications',
-                data: [250, 279, 349, 614, 529, 576, 489, 513, 327, 376, 423, 321]
-
+                type: 'column',
+                name: '# of Applications ',
+//                    data: data,
+                data:
+                        [
+//                    TO DO :: ITERATE THROUGH THE JSONOBJ
+                            [Date.UTC(jsonObj[0].year,jsonObj[0].month ,jsonObj[0].day ), jsonObj[0].count]
+                        ]
+//                        candidateCount.valueOf()
+//                        (candidateCount)
+//                        result
+//                            [
+//                                [Date.UTC(2013,5, 2), 7695],
+//                                [Date.UTC(2013,5, 3), 7648],
+//                                [Date.UTC(2013, 5,4), 7645],
+//                                [Date.UTC(2013, 5, 5),7638]
+//                            ]
             }]
     });
+//    });
 }
-
 function createLocationCountChart(chartId) {
     var defaultTitle = "Overall Location Count";
     var drilldownTitle = "Location Count by ";
@@ -257,7 +253,7 @@ function createLocationCountChart(chartId) {
                     stroke: '#303f9f',
                     states: {
                         hover: {
-                            fill: '#C5CAE9',
+                            fill: '#C5CAE9'
 //                            stroke: 'transparent'
                         }
                     }
