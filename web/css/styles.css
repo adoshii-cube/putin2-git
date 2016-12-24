@@ -1074,6 +1074,14 @@ div .mdl-textfield__label:after {
     overflow: hidden;
 }
 
+.empty-state{
+    margin: auto;
+}
+
+.empty-state img{
+    height: 60vh;
+    width: auto;
+}
 /*AXIS*/
 
 @media screen and (max-width: 767px){
