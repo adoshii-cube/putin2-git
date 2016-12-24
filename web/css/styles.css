@@ -1082,6 +1082,10 @@ div .mdl-textfield__label:after {
     height: 60vh;
     width: auto;
 }
+
+.mdl-data-table tbody tr:hover {
+    background-color: #E8EAF6;
+}
 /*AXIS*/
 
 @media screen and (max-width: 767px){
