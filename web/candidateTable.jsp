@@ -35,7 +35,11 @@
                 </tr>
             </thead>
             <tbody>
-                <%for (Candidate c : candidateList) {%>
+                <%
+                    if (candidateList.size() >= 1) {
+                        System.out.println("ALL GOOD");
+                        for (Candidate c : candidateList) {
+                %>
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getName()%>"><div><%=c.getName()%></div></td>
                     <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getMobileNumber()%>"><div><%=c.getRole()%></div></td>
@@ -52,7 +56,21 @@
             <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getEmailId()%>">
                 <%=c.getEmailId()%>
             </div>
-            <%}%>
+            <%
+                }
+            } else {
+                System.out.println("ERROR STATE MSG");
+            %>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric"><div>OOPS</div></td>
+                <td class="mdl-data-table__cell--non-numeric"><div>NO</div></td>
+                <td class="mdl-data-table__cell--non-numeric"><div>RESULTS</div></td>
+                <td><div>FOUND</div></td>
+                <td class="mdl-data-table__cell--non-numeric"><div>Please try again</div></td>
+            </tr>
+            <%
+                }
+            %>
         </tbody>
     </table>
 </body>
