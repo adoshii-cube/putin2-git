@@ -342,7 +342,7 @@ function createLocationCountChart(chartId) {
 function createRoleCountChart(chartId, data, title) {
 
     Highcharts.setOptions({
-        colors: ['#d32f2f', '#C2185B', '#7B1FA2', '#512DA8', '#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19']
+        colors: ['#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19','#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
     });
     
     // Create the chart
