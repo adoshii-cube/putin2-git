@@ -14,42 +14,46 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Candidate Table</title>
     </head>
-    <body>
-        <!--<div class="mdl-grid" id="candidateTable">-->                    
-            <%
-                CandidateHelper ch = new CandidateHelper();
-                int regionId = Integer.parseInt(request.getParameter("region"));
-                int circleId = Integer.parseInt(request.getParameter("circle"));
-                int cityId = Integer.parseInt(request.getParameter("city"));
-                int roleId = Integer.parseInt(request.getParameter("role"));
-                System.out.println("regionId = " + regionId);
-                List<Candidate> candidateList = ch.getCandidateListByFilter(regionId, circleId, cityId, roleId);
-                System.out.println("Table Calling");
-            %>
-            <table class="mdl-data-table mdl-js-data-table">
-                <thead>
-                    <tr>
-                        <th class="mdl-data-table__cell--non-numeric">Name</th>
-                        <th class="mdl-data-table__cell--non-numeric">Role</th>
-                        <th class="mdl-data-table__cell--non-numeric">City</th>
-                        <th>Mobile Number</th>
-                        <th class="mdl-data-table__cell--non-numeric">Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%for (Candidate c : candidateList) {%>
-                    <tr>
-                        <th class="mdl-data-table__cell--non-numeric"><%=c.getName()%></th>
-                        <th class="mdl-data-table__cell--non-numeric"><%=c.getRole()%></th>
-                        <th class="mdl-data-table__cell--non-numeric"><%=c.getCity()%></th>
-                        <th><%=c.getMobileNumber()%></th>
-                        <th class="mdl-data-table__cell--non-numeric"><%=c.getEmailId()%></th>
-                    </tr>
-                    <%}
-                    System.out.println("Table Call OVER");
-                    %>
-                </tbody>
-            </table>
-        <!--</div>-->
-    </body>
+    <body>                   
+        <%
+            CandidateHelper ch = new CandidateHelper();
+            int regionId = Integer.parseInt(request.getParameter("region"));
+            int circleId = Integer.parseInt(request.getParameter("circle"));
+            int cityId = Integer.parseInt(request.getParameter("city"));
+            int roleId = Integer.parseInt(request.getParameter("role"));
+            System.out.println("regionId = " + regionId);
+            List<Candidate> candidateList = ch.getCandidateListByFilter(regionId, circleId, cityId, roleId);
+        %>
+        <table class="mdl-data-table mdl-js-data-table">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Name</th>
+                    <th class="mdl-data-table__cell--non-numeric">Role</th>
+                    <th class="mdl-data-table__cell--non-numeric">City</th>
+                    <th>Mobile Number</th>
+                    <th class="mdl-data-table__cell--non-numeric">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%for (Candidate c : candidateList) {%>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getName()%>"><div><%=c.getName()%></div></td>
+                    <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getMobileNumber()%>"><div><%=c.getRole()%></div></td>
+                    <td class="mdl-data-table__cell--non-numeric"><div><%=c.getCity()%></div></td>
+                    <td><div><%=c.getMobileNumber()%></div></td>
+                    <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getEmailId()%>"><div><%=c.getEmailId()%></div></td>
+                </tr>
+            <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getName()%>">
+                <%=c.getName()%>
+            </div>
+            <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getMobileNumber()%>">
+                <%=c.getRole()%>
+            </div>
+            <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getEmailId()%>">
+                <%=c.getEmailId()%>
+            </div>
+            <%}%>
+        </tbody>
+    </table>
+</body>
 </html>

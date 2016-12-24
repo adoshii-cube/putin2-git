@@ -594,8 +594,9 @@ textarea{
 }
 
 .mdl-grid table{
-    width: 94%;
+    /*width: 94%;*/
 }
+
 .clients {
     /*background: #bdbdbd;*/
     padding: 1em 0;
@@ -1063,7 +1064,7 @@ div .mdl-textfield__label:after {
 
 .mdl-data-table td div{
     text-overflow: ellipsis;
-    display: inline-block;
+    /*display: inline-block;*/
     width: 150px;
     white-space: nowrap;
     overflow: hidden;

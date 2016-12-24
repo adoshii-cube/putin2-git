@@ -40,14 +40,6 @@ $(document).ready(function () {
         }
     });
 
-
-
-//    $('select option').each(function () {
-//        $("select").on("change", function () {
-//            var selected = $(this).val();
-//            $("#results").html("You selected: " + selected + $("select option:selected").val());
-//        });
-//    });
 });
 
 //On dropdown Update - REGION
@@ -60,8 +52,6 @@ $('#dropdown_region').on('change', function () {
     });
     selectedRegionId = $(this).val();
     updateValuetoAjax('Region', selectedRegionId);
-//        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
-    //        $("#results").html("You selected: " + selected);
 });
 
 //On dropdown Update - CIRCLE
@@ -74,7 +64,6 @@ $('#dropdown_circle').on('change', function () {
     });
     selectedCircleId = $(this).val();
     updateValuetoAjax('Circle', selectedCircleId);
-//        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
 });
 
 //On dropdown Update - CITY
@@ -87,7 +76,6 @@ $('#dropdown_city').on('change', function () {
     });
     selectedCityId = $(this).val();
     updateValuetoAjax('City', selectedCityId);
-//        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
 });
 
 //On dropdown Update - ROLE
@@ -100,7 +88,6 @@ $('#dropdown_role').on('change', function () {
     });
     selectedRoleId = $(this).val();
     updateValuetoAjax('Role', selectedRoleId);
-//        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
 });
 
 function createCandidatesPerMonthChart(chartId) {
@@ -155,7 +142,7 @@ function createCandidatesPerMonthChart(chartId) {
                 data:
                         [
 //                    TO DO :: ITERATE THROUGH THE JSONOBJ
-                            [Date.UTC(jsonObj[0].year,jsonObj[0].month ,jsonObj[0].day ), jsonObj[0].count]
+                            [Date.UTC(jsonObj[0].year, jsonObj[0].month, jsonObj[0].day), jsonObj[0].count]
                         ]
 //                        candidateCount.valueOf()
 //                        (candidateCount)
@@ -170,6 +157,7 @@ function createCandidatesPerMonthChart(chartId) {
     });
 //    });
 }
+
 function createLocationCountChart(chartId) {
     var defaultTitle = "Overall Location Count";
     var drilldownTitle = "Location Count by ";
@@ -392,9 +380,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
         },
         url: "candidateTable.jsp",
         success: function (res) {
-            // We'll put some code here in a minute
             $("#candidateTable").html(res);
         }
     });
-
 }

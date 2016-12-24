@@ -160,11 +160,6 @@
                                         %>
                                         <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
                                         <% }%>
-                                        <!--<option value=""></option>-->
-                                        <!--<option value="N">North</option>-->
-                                        <!--<option value="E">East</option>-->
-                                        <!--<option value="W">West</option>-->
-                                        <!--<option value="S">South</option>-->
                                     </select>
                                     <label for="dropdown_region" class="mdl-selectfield__label">REGION</label>
                                     <span class="mdl-selectfield__error">Please select a region</span>
@@ -176,12 +171,6 @@
                                         %>
                                         <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
                                         <% }%>
-                                        <!--<option value=""></option>-->
-                                        <!--<option value="C0">All</option>-->
-                                        <!--<option value="C1">Circle 1</option>-->
-                                        <!--<option value="C2">Circle 2</option>-->
-                                        <!--<option value="C3">Circle 3</option>-->
-                                        <!--<option value="C4">Circle 4</option>-->
                                     </select>
                                     <label for="dropdown_circle" class="mdl-selectfield__label">CIRCLE</label>
                                     <span class="mdl-selectfield__error">Please select a circle</span>
@@ -193,12 +182,6 @@
                                         %>
                                         <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
                                         <% }%>
-                                        <!--<option value=""></option>-->
-                                        <!--<option value="ct_b0">All</option>-->
-                                        <!--<option value="ct_b1">Bengaluru</option>-->
-                                        <!--<option value="ct_c2">Chennai</option>-->
-                                        <!--<option value="ct_m3">Mumbai</option>-->
-                                        <!--<option value="ct_n2">New Delhi</option>-->
                                     </select>
                                     <label for="dropdown_city" class="mdl-selectfield__label">CITY</label>
                                 </div>
@@ -209,83 +192,45 @@
                                         %>
                                         <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
                                         <% }%>
-                                        <!--<option value="r0">All</option>-->
-                                        <!--<option value="r1">Assistant Manager</option>-->
-                                        <!--<option value="r2">Business Development Executive</option>-->
-                                        <!--<option value="r3">Manager</option>-->
                                     </select>
                                     <label for="dropdown_role" class="mdl-selectfield__label">ROLE</label>
                                 </div>
                             </form>
                         </div>
-                        <div class="mdl-grid" id="results">
-
-                        </div>
                         <div class="mdl-grid" id="candidateTable">                    
                             <%
                                 CandidateHelper ch = new CandidateHelper();
-//                                String regionId = request.getParameter("region");
-//                                System.out.println("regionId = " + regionId);
                                 List<Candidate> candidateList = ch.getCandidateListByFilter(1, 0, 0, 0);
                             %>
                             <table class="mdl-data-table mdl-js-data-table">
                                 <thead>
                                     <tr>
-                                        <td class="mdl-data-table__cell--non-numeric">Name</td>
-                                        <td class="mdl-data-table__cell--non-numeric">Role</td>
-                                        <td class="mdl-data-table__cell--non-numeric">City</td>
-                                        <td>Mobile Number</td>
-                                        <td class="mdl-data-table__cell--non-numeric">Email</td>
+                                        <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Role</th>
+                                        <th class="mdl-data-table__cell--non-numeric">City</th>
+                                        <th>Mobile Number</th>
+                                        <th class="mdl-data-table__cell--non-numeric">Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <%for (Candidate c : candidateList) {%>
                                     <tr>
-                                        <td class="mdl-data-table__cell--non-numeric" id="tt3-<%=c.getName()%>"><%=c.getName()%></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><div><%=c.getRole()%></div></td>
+                                        <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getName()%>"><div><%=c.getName()%></div></td>
+                                        <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getMobileNumber()%>"><div><%=c.getRole()%></div></td>
                                         <td class="mdl-data-table__cell--non-numeric"><div><%=c.getCity()%></div></td>
                                         <td><div><%=c.getMobileNumber()%></div></td>
-                                        <td class="mdl-data-table__cell--non-numeric"><div><%=c.getEmailId()%></div></td>
+                                        <td class="mdl-data-table__cell--non-numeric" id="tt-<%=c.getEmailId()%>"><div><%=c.getEmailId()%></div></td>
                                     </tr>
-                                <div class="mdl-tooltip" data-mdl-for="tt3-<%=c.getName()%>">
+                                <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getName()%>">
                                     <%=c.getName()%>
                                 </div>
+                                <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getMobileNumber()%>">
+                                    <%=c.getRole()%>
+                                </div>
+                                <div class="mdl-tooltip" data-mdl-for="tt-<%=c.getEmailId()%>">
+                                    <%=c.getEmailId()%>
+                                </div>
                                 <%}%>
-                                <!--<tr>-->
-                                <!--<td class="mdl-data-table__cell--non-numeric">John Lennon</td>-->
-                                <!--<td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>-->
-                                <!--<td class="mdl-data-table__cell--non-numeric">New Delhi</td>-->
-                                <!--<td>98202 98202</td>-->
-                                <!--<td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>-->
-                                <!--</tr>-->
-                                <!--                                    <tr>
-                                                                        <td class="mdl-data-table__cell--non-numeric">John Lennon</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">New Delhi</td>
-                                                                        <td>98202 98202</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">john@lennon.com</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Business Development Executive</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Bengaluru</td>
-                                                                        <td>98022 98022</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">paul@mccartney.com</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Manager</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Chennai</td>
-                                                                        <td>98980 98980</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">george@harrison.com</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Assistant Manager</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">Mumbai</td>
-                                                                        <td>98798 98798</td>
-                                                                        <td class="mdl-data-table__cell--non-numeric">ringo@starr.com</td>
-                                                                    </tr>-->
                                 </tbody>
                             </table>
                         </div>
