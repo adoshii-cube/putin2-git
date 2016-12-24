@@ -124,10 +124,10 @@
                                             jObj.put("day", day);
                                             jObj.put("count", count);
                                             jArray.put(jObj);
-                                            
+
                                             System.out.println("jsonObject :::::::::::" + jObj);
                                         }
-                                        
+
                                         System.out.println("jArray :::::::::::" + jArray);
                                     %>
                                     <input type="hidden" id="object" value='<%=jArray%>'/>
@@ -151,51 +151,52 @@
                     %>
                     <div class="page-content">
                         <div class="mdl-grid">
-                            <form action="#">
-                                <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
-                                    <input type="hidden" value="Submit">
-                                    <select id="dropdown_region" name="region" class="mdl-selectfield__select" required>
-                                        <%
-                                            for (Map.Entry<Integer, String> entry : regionMaster.entrySet()) {
-                                        %>
-                                        <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
-                                        <% }%>
-                                    </select>
-                                    <label for="dropdown_region" class="mdl-selectfield__label">REGION</label>
-                                    <span class="mdl-selectfield__error">Please select a region</span>
-                                </div>
-                                <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
-                                    <select id="dropdown_circle" name="circle" class="mdl-selectfield__select" required>
-                                        <%
-                                            for (Map.Entry<Integer, String> entry : circleMaster.entrySet()) {
-                                        %>
-                                        <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
-                                        <% }%>
-                                    </select>
-                                    <label for="dropdown_circle" class="mdl-selectfield__label">CIRCLE</label>
-                                    <span class="mdl-selectfield__error">Please select a circle</span>
-                                </div>
-                                <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
-                                    <select id="dropdown_city" name="city" class="mdl-selectfield__select">
-                                        <%
-                                            for (Map.Entry<Integer, String> entry : cityMaster.entrySet()) {
-                                        %>
-                                        <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
-                                        <% }%>
-                                    </select>
-                                    <label for="dropdown_city" class="mdl-selectfield__label">CITY</label>
-                                </div>
-                                <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
-                                    <select id="dropdown_role" name="role" class="mdl-selectfield__select">
-                                        <%
-                                            for (Map.Entry<Integer, String> entry : roleMaster.entrySet()) {
-                                        %>
-                                        <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
-                                        <% }%>
-                                    </select>
-                                    <label for="dropdown_role" class="mdl-selectfield__label">ROLE</label>
-                                </div>
-                            </form>
+                            <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--3dp">
+                                <form action="#">
+                                    <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                                        <select id="dropdown_region" name="region" class="mdl-selectfield__select" required>
+                                            <%
+                                                for (Map.Entry<Integer, String> entry : regionMaster.entrySet()) {
+                                            %>
+                                            <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
+                                            <% }%>
+                                        </select>
+                                        <label for="dropdown_region" class="mdl-selectfield__label">REGION</label>
+                                        <span class="mdl-selectfield__error">Please select a region</span>
+                                    </div>
+                                    <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                                        <select id="dropdown_circle" name="circle" class="mdl-selectfield__select" required>
+                                            <%
+                                                for (Map.Entry<Integer, String> entry : circleMaster.entrySet()) {
+                                            %>
+                                            <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
+                                            <% }%>
+                                        </select>
+                                        <label for="dropdown_circle" class="mdl-selectfield__label">CIRCLE</label>
+                                        <span class="mdl-selectfield__error">Please select a circle</span>
+                                    </div>
+                                    <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                                        <select id="dropdown_city" name="city" class="mdl-selectfield__select">
+                                            <%
+                                                for (Map.Entry<Integer, String> entry : cityMaster.entrySet()) {
+                                            %>
+                                            <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
+                                            <% }%>
+                                        </select>
+                                        <label for="dropdown_city" class="mdl-selectfield__label">CITY</label>
+                                    </div>
+                                    <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label">
+                                        <select id="dropdown_role" name="role" class="mdl-selectfield__select">
+                                            <%
+                                                for (Map.Entry<Integer, String> entry : roleMaster.entrySet()) {
+                                            %>
+                                            <option value="<%=entry.getKey()%>" > <%=entry.getValue()%> </option>
+                                            <% }%>
+                                        </select>
+                                        <label for="dropdown_role" class="mdl-selectfield__label">ROLE</label>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div class="mdl-grid" id="candidateTable">                    
                             <%

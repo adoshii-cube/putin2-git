@@ -26,7 +26,8 @@ $(document).ready(function () {
     createLocationCountChart(chartGetLocationCountId);
 
     var chartGetRoleCountId = 'get-role-count';
-    createRoleCountChart(chartGetRoleCountId);
+    createRoleCountChartOnLoad(chartGetRoleCountId);
+//    createRoleCountChart(chartGetRoleCountId);
 
     //On Page Load
     $("select option").each(function () {
@@ -171,7 +172,7 @@ function createLocationCountChart(chartId) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
                     console.log("DRILL DOWN");
                     data = [{
-                            name: 'Things',
+                            name: 'Tooltip Text',
                             colorByPoint: true,
                             data: [{
                                     name: 'Animals',
@@ -191,7 +192,7 @@ function createLocationCountChart(chartId) {
                     chart.setTitle({text: defaultTitle});
                     console.log("DRILL UP");
                     data = [{
-                            name: 'Things',
+                            name: 'Tooltip Text',
                             colorByPoint: true,
                             data: [{
                                     name: 'Animals2',
@@ -321,7 +322,9 @@ function createLocationCountChart(chartId) {
 }
 
 function createRoleCountChart(chartId, data) {
-
+    var defaultTitle = "Overall Role Count";
+    var drilldownTitle = "Role Count by ";
+    
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
         chart: {
@@ -355,6 +358,24 @@ function createRoleCountChart(chartId, data) {
         },
         series: data
     });
+}
+
+function createRoleCountChartOnLoad(chartId) {
+    data = [{
+            name: 'On Load',
+            colorByPoint: true,
+            data: [{
+                    name: 'A',
+                    y: 5
+                }, {
+                    name: 'B',
+                    y: 2
+                }, {
+                    name: 'C',
+                    y: 4
+                }]
+        }];
+    createRoleCountChart(chartId, data);
 }
 
 function updateValuetoAjax(key, value) {
