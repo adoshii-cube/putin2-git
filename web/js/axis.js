@@ -171,6 +171,7 @@ function createLocationCountChart(chartId) {
                 drilldown: function (e) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
                     console.log("DRILL DOWN");
+                    var roleCountTitle = 'Role Drill DOWN';
                     data = [{
                             name: 'Tooltip Text',
                             colorByPoint: true,
@@ -185,12 +186,13 @@ function createLocationCountChart(chartId) {
                                     y: 4
                                 }]
                         }];
-                    createRoleCountChart("get-role-count", data);
+                    createRoleCountChart("get-role-count", data, roleCountTitle);
 //                    alert("DRILL DOWN ALERT");
                 },
                 drillup: function (e) {
                     chart.setTitle({text: defaultTitle});
                     console.log("DRILL UP");
+                    var roleCountTitle = 'Role Drill UP';
                     data = [{
                             name: 'Tooltip Text',
                             colorByPoint: true,
@@ -205,7 +207,7 @@ function createLocationCountChart(chartId) {
                                     y: 4
                                 }]
                         }];
-                    createRoleCountChart("get-role-count", data);
+                    createRoleCountChart("get-role-count", data, roleCountTitle);
 //                    alert("DRILL UP ALERT");
                 },
                 click: function (e) {
@@ -321,10 +323,8 @@ function createLocationCountChart(chartId) {
     });
 }
 
-function createRoleCountChart(chartId, data) {
-    var defaultTitle = "Overall Role Count";
-    var drilldownTitle = "Role Count by ";
-    
+function createRoleCountChart(chartId, data, title) {
+
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
         chart: {
@@ -340,7 +340,7 @@ function createRoleCountChart(chartId, data) {
         },
         credits: false,
         title: {
-            text: 'Overall Role Count'
+            text: title
         },
         xAxis: {
             type: 'category'
@@ -361,6 +361,7 @@ function createRoleCountChart(chartId, data) {
 }
 
 function createRoleCountChartOnLoad(chartId) {
+    var chartCountTitle = 'Role Count on pg Load';
     data = [{
             name: 'On Load',
             colorByPoint: true,
@@ -375,7 +376,7 @@ function createRoleCountChartOnLoad(chartId) {
                     y: 4
                 }]
         }];
-    createRoleCountChart(chartId, data);
+    createRoleCountChart(chartId, data, chartCountTitle);
 }
 
 function updateValuetoAjax(key, value) {
