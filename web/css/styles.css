@@ -34,6 +34,10 @@ a img{
     color: #fff;
 }
 
+*:focus {
+    outline: none;
+}
+
 .android-search-box .mdl-textfield__input {
     color: rgba(0, 0, 0, 0.87);
 }
