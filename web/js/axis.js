@@ -163,6 +163,19 @@ function createLocationCountChart(chartId) {
     var defaultTitle = "Overall Location Count";
     var drilldownTitle = "Location Count by ";
 
+    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+        var colors = [],
+                base = '#7986CB',
+                i;
+
+        for (i = 0; i < 10; i += 1) {
+            // Start out with a darkened base color (negative brighten), and end
+            // up with a much brighter color
+            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+        }
+        return colors;
+    }());
+
     var chart = new Highcharts.chart(chartId, {
         chart: {
 //            height: 300,
@@ -294,7 +307,10 @@ function createLocationCountChart(chartId) {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
                 },
                 shadow: false,
                 showInLegend: true
@@ -325,6 +341,10 @@ function createLocationCountChart(chartId) {
 
 function createRoleCountChart(chartId, data, title) {
 
+    Highcharts.setOptions({
+        colors: ['#d32f2f', '#C2185B', '#7B1FA2', '#512DA8', '#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19']
+    });
+    
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
         chart: {
