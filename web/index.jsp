@@ -3,6 +3,7 @@
     Created on : 15 Dec, 2016, 4:54:27 PM
     Author     : adoshi
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="org.json.JSONObject"%>
@@ -10,19 +11,12 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
-<%--<%@page import="java.util.Calendar"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Date"%>--%>
 <%@page import="org.icube.dashboard.DashboardHelper"%>
 <%@page import="java.util.List"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.icube.candidate.Candidate"%>
 <%@page import="org.icube.helper.MasterListHelper"%>
 <%@page import="org.icube.candidate.CandidateHelper"%>
-<%--<%@page import="org.json.JSONArray"%>--%>
-<%--<%@page import="org.json.JSONObject"%>--%>
 
 <!DOCTYPE html>
 <html lang="en">

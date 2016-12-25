@@ -94,9 +94,13 @@ $('#dropdown_role').on('change', function () {
 function createCandidatesPerMonthChart(chartId) {
 
     var obj = $('#object').val();
-    console.log("obj::: " + obj);
     var jsonObj = $.parseJSON(obj);
-    console.log("jsonObj::: " + jsonObj);
+    var series = [];
+    
+    for(var i=0; i<jsonObj.length ; i++){
+        series.push([Date.UTC(jsonObj[i].year, jsonObj[i].month, jsonObj[i].day), jsonObj[i].count]);
+    }
+    
     Highcharts.chart(chartId, {
         chart: {
             zoomType: 'x',
@@ -139,24 +143,9 @@ function createCandidatesPerMonthChart(chartId) {
         series: [{
                 type: 'column',
                 name: '# of Applications ',
-//                    data: data,
-                data:
-                        [
-//                    TO DO :: ITERATE THROUGH THE JSONOBJ
-                            [Date.UTC(jsonObj[0].year, jsonObj[0].month, jsonObj[0].day), jsonObj[0].count]
-                        ]
-//                        candidateCount.valueOf()
-//                        (candidateCount)
-//                        result
-//                            [
-//                                [Date.UTC(2013,5, 2), 7695],
-//                                [Date.UTC(2013,5, 3), 7648],
-//                                [Date.UTC(2013, 5,4), 7645],
-//                                [Date.UTC(2013, 5, 5),7638]
-//                            ]
+                data: series
             }]
     });
-//    });
 }
 
 function createLocationCountChart(chartId) {
