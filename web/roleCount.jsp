@@ -13,10 +13,11 @@
 
 <%
     DashboardHelper dh = new DashboardHelper();
-    int regionId = Integer.parseInt(request.getParameter("region"));
-    System.out.println("REGION ID AJAX::::::" + regionId);
-//            int circleId = Integer.parseInt(request.getParameter("circle"));
-    List<Role> roleCountList = dh.getRoleCount(regionId, 0);
+    String regionIdStr = request.getParameter("region");
+    int regionId = Integer.parseInt(regionIdStr.equals("") ? "0" : regionIdStr.substring(1));
+    String circleIdStr = request.getParameter("circle");
+    int circleId = Integer.parseInt(circleIdStr.equals("") ? "0" : circleIdStr.substring(1));
+    List<Role> roleCountList = dh.getRoleCount(regionId, circleId);
     JSONArray jArrayRoleCount = new JSONArray();
     for (Role r : roleCountList) {
         JSONObject jObj = new JSONObject();

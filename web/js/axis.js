@@ -3,6 +3,8 @@ selectedCircleId = 0;
 selectedCityId = 0;
 selectedRoleId = 0;
 
+drillDownRegion = "";
+drillDownCircle = "";
 
 $(document).ready(function () {
     $('.mdl-layout__tab').on('click', function () {
@@ -169,7 +171,7 @@ function createLocationCountChart(chartId) {
     var jsonRegionObj = $.parseJSON(regionObj);
     var regionSeries = [];
     for (var i = 0; i < jsonRegionObj.length; i++) {
-        regionSeries.push({"name": jsonRegionObj[i].regionName, "y": jsonRegionObj[i].count, "drilldown": "R"+jsonRegionObj[i].regionId});
+        regionSeries.push({"name": jsonRegionObj[i].regionName, "y": jsonRegionObj[i].count, "drilldown": "R" + jsonRegionObj[i].regionId});
     }
 
     var circleObj = $('#jArrayCircleCount').val();
@@ -180,26 +182,26 @@ function createLocationCountChart(chartId) {
     var westData = [];
     for (var i = 0; i < jsonCircleObj.length; i++) {
         if (jsonCircleObj[i].regionName === "East") {
-            eastData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+            eastData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C" + jsonCircleObj[i].circleId});
         } else if (jsonCircleObj[i].regionName === "North") {
-            northData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+            northData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C" + jsonCircleObj[i].circleId});
         } else if (jsonCircleObj[i].regionName === "South") {
-            southData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+            southData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C" + jsonCircleObj[i].circleId});
         } else if (jsonCircleObj[i].regionName === "West") {
-            westData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+            westData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C" + jsonCircleObj[i].circleId});
         }
     }
 
     var circleSeries = [];
     for (var i = 0; i < jsonRegionObj.length; i++) {
         if (jsonRegionObj[i].regionName === "East") {
-            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": eastData});
+            circleSeries.push({"id": "R" + jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": eastData});
         } else if (jsonRegionObj[i].regionName === "North") {
-            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": northData});
+            circleSeries.push({"id": "R" + jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": northData});
         } else if (jsonRegionObj[i].regionName === "South") {
-            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": southData});
+            circleSeries.push({"id": "R" + jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": southData});
         } else if (jsonRegionObj[i].regionName === "West") {
-            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": westData});
+            circleSeries.push({"id": "R" + jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": westData});
         }
     }
 
@@ -207,14 +209,14 @@ function createLocationCountChart(chartId) {
     var jsonCityObj = $.parseJSON(cityObj);
     var circleCityMap = {};
     for (var i = 0; i < jsonCityObj.length; i++) {
-        if ("C"+jsonCityObj[i].circleId in circleCityMap) {
-            var dataCircle = circleCityMap["C"+jsonCityObj[i].circleId];
+        if ("C" + jsonCityObj[i].circleId in circleCityMap) {
+            var dataCircle = circleCityMap["C" + jsonCityObj[i].circleId];
             dataCircle.push([jsonCityObj[i].cityName, jsonCityObj[i].count]);
-            circleCityMap["C"+jsonCityObj[i].circleId] = dataCircle;
+            circleCityMap["C" + jsonCityObj[i].circleId] = dataCircle;
         } else {
             var dataCircle = [];
             dataCircle.push([jsonCityObj[i].cityName, jsonCityObj[i].count]);
-            circleCityMap["C"+jsonCityObj[i].circleId] = dataCircle;
+            circleCityMap["C" + jsonCityObj[i].circleId] = dataCircle;
         }
     }
 
@@ -222,8 +224,6 @@ function createLocationCountChart(chartId) {
         circleSeries.push({"id": key, "name": "Count", "data": circleCityMap[key]});
     }
 
-    console.log(circleSeries);
-//    circleSeries.push(circleDrillDown);
     var chart = new Highcharts.chart(chartId, {
         chart: {
 //            height: 300,
@@ -232,13 +232,19 @@ function createLocationCountChart(chartId) {
                 drilldown: function (e) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
                     console.log("DRILL DOWN");
+                    console.log(e);
+                    console.log("DRILL UP::::::::::: " + e.seriesOptions.id);
                     var roleCountTitle = 'Role Drill DOWN';
-
+                    if (drillDownRegion === "") {
+                        drillDownRegion = e.seriesOptions.id;
+                    } else if (drillDownRegion !== "" && drillDownCircle === "") {
+                        drillDownCircle = e.seriesOptions.id;
+                    }
                     $.ajax({
                         type: "POST",
                         data: {
-                            region: e.seriesOptions.id
-//                            circle: e.point.id
+                            region: drillDownRegion,
+                            circle: drillDownCircle
                         },
                         url: "roleCount.jsp",
                         success: function (res) {
@@ -255,11 +261,17 @@ function createLocationCountChart(chartId) {
                     console.log("DRILL UP");
                     console.log("DRILL UP::::::::::: " + e.seriesOptions.id);
                     var roleCountTitle = 'Role Drill UP';
+                    if (drillDownCircle !== "") {
+                        drillDownCircle = "";
+                    } else if ( drillDownCircle === "" && drillDownRegion !== "") {
+                        drillDownRegion = "";
+                    }
+
                     $.ajax({
                         type: "POST",
                         data: {
-                            region: 0
-//                            circle: e.point.id
+                            region: drillDownRegion,
+                            circle: drillDownCircle
                         },
                         url: "roleCount.jsp",
                         success: function (res) {
