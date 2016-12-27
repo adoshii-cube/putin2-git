@@ -96,11 +96,11 @@ function createCandidatesPerMonthChart(chartId) {
     var obj = $('#object').val();
     var jsonObj = $.parseJSON(obj);
     var series = [];
-    
-    for(var i=0; i<jsonObj.length ; i++){
+
+    for (var i = 0; i < jsonObj.length; i++) {
         series.push([Date.UTC(jsonObj[i].year, jsonObj[i].month, jsonObj[i].day), jsonObj[i].count]);
     }
-    
+
     Highcharts.chart(chartId, {
         chart: {
             zoomType: 'x',
@@ -160,11 +160,70 @@ function createLocationCountChart(chartId) {
         for (i = 0; i < 10; i += 1) {
             // Start out with a darkened base color (negative brighten), and end
             // up with a much brighter color
-            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+            colors.push(Highcharts.Color(base).brighten((i - 3) / 15).get());
         }
         return colors;
     }());
 
+    var regionObj = $('#jArrayRegionCount').val();
+    var jsonRegionObj = $.parseJSON(regionObj);
+    var regionSeries = [];
+    for (var i = 0; i < jsonRegionObj.length; i++) {
+        regionSeries.push({"name": jsonRegionObj[i].regionName, "y": jsonRegionObj[i].count, "drilldown": "R"+jsonRegionObj[i].regionId});
+    }
+
+    var circleObj = $('#jArrayCircleCount').val();
+    var jsonCircleObj = $.parseJSON(circleObj);
+    var eastData = [];
+    var northData = [];
+    var southData = [];
+    var westData = [];
+    for (var i = 0; i < jsonCircleObj.length; i++) {
+        if (jsonCircleObj[i].regionName === "East") {
+            eastData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+        } else if (jsonCircleObj[i].regionName === "North") {
+            northData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+        } else if (jsonCircleObj[i].regionName === "South") {
+            southData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+        } else if (jsonCircleObj[i].regionName === "West") {
+            westData.push({"name": jsonCircleObj[i].circleName, "y": jsonCircleObj[i].count, "drilldown": "C"+jsonCircleObj[i].circleId});
+        }
+    }
+
+    var circleSeries = [];
+    for (var i = 0; i < jsonRegionObj.length; i++) {
+        if (jsonRegionObj[i].regionName === "East") {
+            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": eastData});
+        } else if (jsonRegionObj[i].regionName === "North") {
+            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": northData});
+        } else if (jsonRegionObj[i].regionName === "South") {
+            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": southData});
+        } else if (jsonRegionObj[i].regionName === "West") {
+            circleSeries.push({"id": "R"+jsonRegionObj[i].regionId, "name": jsonRegionObj[i].regionName, "data": westData});
+        }
+    }
+
+    var cityObj = $('#jArrayCityCount').val();
+    var jsonCityObj = $.parseJSON(cityObj);
+    var circleCityMap = {};
+    for (var i = 0; i < jsonCityObj.length; i++) {
+        if ("C"+jsonCityObj[i].circleId in circleCityMap) {
+            var dataCircle = circleCityMap["C"+jsonCityObj[i].circleId];
+            dataCircle.push([jsonCityObj[i].cityName, jsonCityObj[i].count]);
+            circleCityMap["C"+jsonCityObj[i].circleId] = dataCircle;
+        } else {
+            var dataCircle = [];
+            dataCircle.push([jsonCityObj[i].cityName, jsonCityObj[i].count]);
+            circleCityMap["C"+jsonCityObj[i].circleId] = dataCircle;
+        }
+    }
+
+    for (var key in circleCityMap) {
+        circleSeries.push({"id": key, "name": "Count", "data": circleCityMap[key]});
+    }
+
+    console.log(circleSeries);
+//    circleSeries.push(circleDrillDown);
     var chart = new Highcharts.chart(chartId, {
         chart: {
 //            height: 300,
@@ -174,43 +233,43 @@ function createLocationCountChart(chartId) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
                     console.log("DRILL DOWN");
                     var roleCountTitle = 'Role Drill DOWN';
-                    data = [{
-                            name: 'Tooltip Text',
-                            colorByPoint: true,
-                            data: [{
-                                    name: 'Animals',
-                                    y: 5
-                                }, {
-                                    name: 'Fruits',
-                                    y: 2
-                                }, {
-                                    name: 'Cars',
-                                    y: 4
-                                }]
-                        }];
-                    createRoleCountChart("get-role-count", data, roleCountTitle);
-//                    alert("DRILL DOWN ALERT");
+
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            region: e.seriesOptions.id
+//                            circle: e.point.id
+                        },
+                        url: "roleCount.jsp",
+                        success: function (res) {
+                            console.log(res);
+                            createRoleCountChart("get-role-count", res, roleCountTitle);
+                        },
+                        error: function (res, err) {
+                            console.log("error ::::::::: " + err);
+                        }
+                    });
                 },
                 drillup: function (e) {
                     chart.setTitle({text: defaultTitle});
                     console.log("DRILL UP");
+                    console.log("DRILL UP::::::::::: " + e.seriesOptions.id);
                     var roleCountTitle = 'Role Drill UP';
-                    data = [{
-                            name: 'Tooltip Text',
-                            colorByPoint: true,
-                            data: [{
-                                    name: 'Animals2',
-                                    y: 5
-                                }, {
-                                    name: 'Fruits3',
-                                    y: 2
-                                }, {
-                                    name: 'Cars4',
-                                    y: 4
-                                }]
-                        }];
-                    createRoleCountChart("get-role-count", data, roleCountTitle);
-//                    alert("DRILL UP ALERT");
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            region: 0
+//                            circle: e.point.id
+                        },
+                        url: "roleCount.jsp",
+                        success: function (res) {
+                            console.log(res);
+                            createRoleCountChart("get-role-count", res, roleCountTitle);
+                        },
+                        error: function (res, err) {
+                            console.log("error ::::::::: " + err);
+                        }
+                    });
                 },
                 click: function (e) {
 //                    console.log("Hey, there")
@@ -253,50 +312,12 @@ function createLocationCountChart(chartId) {
                 }
 
             },
-            series: [{
-                    id: 'fru',
-                    name: 'Fruits',
-                    data: [
-                        ['Apples', 4],
-                        ['Pears', 6],
-                        ['Oranges', 2],
-                        ['Grapes', 8]
-                    ]
-                }, {
-                    id: 'carz',
-                    name: 'Cars',
-                    data: [{
-                            name: 'Toyota',
-                            y: 4,
-                            drilldown: 'toyota'
-                        },
-                        ['Volkswagen', 3],
-                        ['Opel', 5]
-                    ]
-                }, {
-                    id: 'toyota',
-                    name: 'Toyota',
-                    data: [
-                        ['RAV4', 3],
-                        ['Corolla', 1],
-                        ['Carina', 4],
-                        ['Land Cruiser', 5],
-                        {name: ' drilldownToyota',
-                            y: 10,
-                            drilldown: 'dummy'}
-                    ]
-                }, {
-                    id: 'dummy',
-                    name: 'DUMB',
-                    data: [
-                        ['x', 25],
-                        ['y', 50]]
-                }]
+            series: circleSeries
         },
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
@@ -309,31 +330,25 @@ function createLocationCountChart(chartId) {
             }
         },
         series: [{
-//                RASHMI
-                name: 'Overview',
+                name: 'Count',
                 colorByPoint: true,
-                data: [{
-                        name: 'Fruits',
-                        y: 10,
-                        drilldown: 'fru'
-                    }, {
-                        name: 'Cars',
-                        y: 12,
-                        drilldown: 'carz'
-                    }, {
-                        name: 'Countries',
-                        y: 8
-                    }]
+                data: regionSeries
             }]
     });
 }
 
 function createRoleCountChart(chartId, data, title) {
+//console.log("Role Count data :::::: " + data);
 
+    var roleSeries = [];
+
+    for (var i = 0; i < data.length; i++) {
+        roleSeries.push({"name": data[i].name, "y": data[i].count});
+    }
     Highcharts.setOptions({
-        colors: ['#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19','#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
+        colors: ['#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
     });
-    
+
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
         chart: {
@@ -365,27 +380,20 @@ function createRoleCountChart(chartId, data, title) {
                 }
             }
         },
-        series: data
+        series: [{
+                name: 'Count',
+                colorByPoint: true,
+                data: roleSeries
+            }]
     });
 }
 
 function createRoleCountChartOnLoad(chartId) {
-    var chartCountTitle = 'Role Count on pg Load';
-    data = [{
-            name: 'On Load',
-            colorByPoint: true,
-            data: [{
-                    name: 'A',
-                    y: 5
-                }, {
-                    name: 'B',
-                    y: 2
-                }, {
-                    name: 'C',
-                    y: 4
-                }]
-        }];
-    createRoleCountChart(chartId, data, chartCountTitle);
+
+    var roleCount = $('#jArrayRoleCount').val();
+    var jsonObj = $.parseJSON(roleCount);
+    var chartCountTitle = 'Overall Role Count';
+    createRoleCountChart(chartId, jsonObj, chartCountTitle);
 }
 
 function updateValuetoAjax(key, value) {

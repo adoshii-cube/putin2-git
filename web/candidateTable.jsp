@@ -66,14 +66,6 @@
             <div class="empty-state"><img src="images/empty_state.png" alt="No results available for selection. Please try again"></div>\n\
 ');
             </script>
-
-            <!--            <tr>
-                            <td class="mdl-data-table__cell--non-numeric"><div>OOPS</div></td>
-                            <td class="mdl-data-table__cell--non-numeric"><div>NO</div></td>
-                            <td class="mdl-data-table__cell--non-numeric"><div>RESULTS</div></td>
-                            <td><div>FOUND</div></td>
-                            <td class="mdl-data-table__cell--non-numeric"><div>Please try again</div></td>
-                        </tr>-->
             <%
                 }
             %>

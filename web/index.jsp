@@ -3,6 +3,8 @@
     Created on : 15 Dec, 2016, 4:54:27 PM
     Author     : adoshi
 --%>
+<%@page import="org.icube.dashboard.LocationData"%>
+<%@page import="org.icube.role.Role"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.json.JSONArray"%>
@@ -103,13 +105,9 @@
 
                                             //EXTRACT DATE FROM JAVA INTO CALENDAR OBJECT
                                             int year = calendar.get(Calendar.YEAR);
-                                            System.out.println("YEAR = " + year);
                                             int month = calendar.get(Calendar.MONTH);
-                                            System.out.println("MONTH = " + month);
                                             int day = calendar.get(Calendar.DAY_OF_MONTH);
-                                            System.out.println("DAY = " + day);
                                             int count = candidateCountMap.get(d);
-                                            System.out.println("COUNT = " + count);
 
                                             //CONVERT DATE TO JSONARRAY
                                             JSONObject jObj = new JSONObject();
@@ -118,20 +116,64 @@
                                             jObj.put("day", day);
                                             jObj.put("count", count);
                                             jArray.put(jObj);
-
-                                            System.out.println("jsonObject :::::::::::" + jObj);
                                         }
-
-                                        System.out.println("jArray :::::::::::" + jArray);
                                     %>
                                     <input type="hidden" id="object" value='<%=jArray%>'/>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
-                                <div id="get-location-count"></div>
+                                <div id="get-location-count">
+                                    <%
+                                        List<LocationData> locationCountList = dh.getLocationCount();
+                                        JSONArray jArrayRegionCount = new JSONArray();
+                                        JSONArray jArrayCircleCount = new JSONArray();
+                                        JSONArray jArrayCityCount = new JSONArray();
+                                        for (LocationData ld : locationCountList) {
+                                            int regionId = ld.getRegionId();
+                                            int circleId = ld.getCircleId();
+                                            int cityId = ld.getCityId();
+
+                                            JSONObject json = new JSONObject();
+                                            json.put("regionId", regionId);
+                                            json.put("regionName", ld.getRegionName());
+                                            json.put("circleId", circleId);
+                                            json.put("circleName", ld.getCircleName());
+                                            json.put("cityId", cityId);
+                                            json.put("cityName", ld.getCityName());
+                                            json.put("count", ld.getCandidateCount());
+
+                                            if (regionId > 0 && circleId == 0 && cityId == 0) {
+                                                jArrayRegionCount.put(json);
+                                            } else if (regionId > 0 && circleId > 0 && cityId == 0) {
+                                                jArrayCircleCount.put(json);
+                                            } else {
+                                                jArrayCityCount.put(json);
+                                            }
+                                        }
+                                        System.out.println("jArrayRegionCount ::::: " + jArrayRegionCount);
+                                        System.out.println("jArrayCircleCount ::::: " + jArrayCircleCount);
+                                        System.out.println("jArrayCityCount ::::: " + jArrayCityCount);
+                                    %>
+                                    <input type="hidden" id="jArrayRegionCount" value='<%=jArrayRegionCount%>'/>
+                                    <input type="hidden" id="jArrayCircleCount" value='<%=jArrayCircleCount%>'/>
+                                    <input type="hidden" id="jArrayCityCount" value='<%=jArrayCityCount%>'/>
+                                </div>
                             </div>
                             <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
-                                <div id="get-role-count"></div>
+                                <div id="get-role-count">
+                                    <%
+                                        List<Role> roleCountList = dh.getRoleCount(0, 0);
+                                        JSONArray jArrayRoleCount = new JSONArray();
+                                        for (Role r : roleCountList) {
+                                            JSONObject jObj = new JSONObject();
+                                            jObj.put("name", r.getRole());
+                                            jObj.put("id", r.getRoleId());
+                                            jObj.put("count", r.getCandidateCount());
+                                            jArrayRoleCount.put(jObj);
+                                        }
+                                    %>
+                                    <input type="hidden" id="jArrayRoleCount" value='<%=jArrayRoleCount%>'/>
+                                </div>
                             </div>
                         </div>
                     </div>
