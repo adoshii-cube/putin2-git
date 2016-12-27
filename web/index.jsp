@@ -150,9 +150,6 @@
                                                 jArrayCityCount.put(json);
                                             }
                                         }
-                                        System.out.println("jArrayRegionCount ::::: " + jArrayRegionCount);
-                                        System.out.println("jArrayCircleCount ::::: " + jArrayCircleCount);
-                                        System.out.println("jArrayCityCount ::::: " + jArrayCityCount);
                                     %>
                                     <input type="hidden" id="jArrayRegionCount" value='<%=jArrayRegionCount%>'/>
                                     <input type="hidden" id="jArrayCircleCount" value='<%=jArrayCircleCount%>'/>

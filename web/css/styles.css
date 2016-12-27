@@ -1061,9 +1061,15 @@ div .mdl-textfield__label:after {
 }
 
 #get-candidates-per-month{
-    height: 35vh;
+    /*height: 35vh;*/
     width: 90%;
     margin: 0 auto;
+}
+
+#get-location-count,
+#get-role-count{
+    /*height: 45vh;*/
+    /*margin: 0 auto;*/
 }
 
 .mdl-data-table td div{

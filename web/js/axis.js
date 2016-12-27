@@ -106,6 +106,7 @@ function createCandidatesPerMonthChart(chartId) {
     Highcharts.chart(chartId, {
         chart: {
             zoomType: 'x',
+            height: 200,
             style: {
                 fontFamily: 'Roboto'
             },
@@ -151,8 +152,8 @@ function createCandidatesPerMonthChart(chartId) {
 }
 
 function createLocationCountChart(chartId) {
-    var defaultTitle = "Overall Location Count";
-    var drilldownTitle = "Location Count by ";
+    var defaultTitle = "Applications by Location";
+    var drilldownTitle = "Applications for ";
 
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
@@ -226,15 +227,12 @@ function createLocationCountChart(chartId) {
 
     var chart = new Highcharts.chart(chartId, {
         chart: {
-//            height: 300,
+            height: 310,
             type: 'pie',
             events: {
                 drilldown: function (e) {
                     chart.setTitle({text: drilldownTitle + e.point.name});
-                    console.log("DRILL DOWN");
-                    console.log(e);
-                    console.log("DRILL UP::::::::::: " + e.seriesOptions.id);
-                    var roleCountTitle = 'Role Drill DOWN';
+                    var roleCountTitle = 'Applications by role for ' + e.point.name;
                     if (drillDownRegion === "") {
                         drillDownRegion = e.seriesOptions.id;
                     } else if (drillDownRegion !== "" && drillDownCircle === "") {
@@ -248,7 +246,6 @@ function createLocationCountChart(chartId) {
                         },
                         url: "roleCount.jsp",
                         success: function (res) {
-                            console.log(res);
                             createRoleCountChart("get-role-count", res, roleCountTitle);
                         },
                         error: function (res, err) {
@@ -258,13 +255,13 @@ function createLocationCountChart(chartId) {
                 },
                 drillup: function (e) {
                     chart.setTitle({text: defaultTitle});
-                    console.log("DRILL UP");
-                    console.log("DRILL UP::::::::::: " + e.seriesOptions.id);
-                    var roleCountTitle = 'Role Drill UP';
                     if (drillDownCircle !== "") {
                         drillDownCircle = "";
-                    } else if ( drillDownCircle === "" && drillDownRegion !== "") {
+                        chart.setTitle({text: "Applications for " + e.seriesOptions.name});
+                        roleCountTitle = "Applications by role for " + e.seriesOptions.name;
+                    } else if (drillDownCircle === "" && drillDownRegion !== "") {
                         drillDownRegion = "";
+                        roleCountTitle = "Applications by Role";
                     }
 
                     $.ajax({
@@ -275,7 +272,6 @@ function createLocationCountChart(chartId) {
                         },
                         url: "roleCount.jsp",
                         success: function (res) {
-                            console.log(res);
                             createRoleCountChart("get-role-count", res, roleCountTitle);
                         },
                         error: function (res, err) {
@@ -284,8 +280,6 @@ function createLocationCountChart(chartId) {
                     });
                 },
                 click: function (e) {
-//                    console.log("Hey, there")
-//                    alert("Oops, I just got clicked !!! ")
                 }
             },
             style: {
@@ -350,7 +344,6 @@ function createLocationCountChart(chartId) {
 }
 
 function createRoleCountChart(chartId, data, title) {
-//console.log("Role Count data :::::: " + data);
 
     var roleSeries = [];
 
@@ -365,6 +358,7 @@ function createRoleCountChart(chartId, data, title) {
     var chart = new Highcharts.Chart(chartId, {
         chart: {
             type: 'bar',
+            height: 310,
 //            renderTo: chartId,
             style: {
                 fontFamily: 'Roboto'
@@ -404,7 +398,7 @@ function createRoleCountChartOnLoad(chartId) {
 
     var roleCount = $('#jArrayRoleCount').val();
     var jsonObj = $.parseJSON(roleCount);
-    var chartCountTitle = 'Overall Role Count';
+    var chartCountTitle = 'Applications by Role';
     createRoleCountChart(chartId, jsonObj, chartCountTitle);
 }
 
@@ -432,6 +426,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
         url: "candidateTable.jsp",
         success: function (res) {
             $("#candidateTable").html(res);
+            componentHandler.upgradeDom();
         }
     });
 }

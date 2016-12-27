@@ -21,7 +21,6 @@
             int circleId = Integer.parseInt(request.getParameter("circle"));
             int cityId = Integer.parseInt(request.getParameter("city"));
             int roleId = Integer.parseInt(request.getParameter("role"));
-            System.out.println("regionId = " + regionId);
             List<Candidate> candidateList = ch.getCandidateListByFilter(regionId, circleId, cityId, roleId);
         %>
         <table class="mdl-data-table mdl-js-data-table">
@@ -59,7 +58,7 @@
             <%
                 }
             } else {
-                System.out.println("ERROR STATE MSG");
+                System.out.println("EMPTY STATE MSG");
             %>
             <script type="text/javascript">
                 $('table').replaceWith('\
