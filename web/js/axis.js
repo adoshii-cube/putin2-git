@@ -8,20 +8,7 @@ drillDownCircle = "";
 
 text = "";
 $(document).ready(function () {
-    $('.mdl-layout__tab').on('click', function () {
-//        if ($('a.is-active').attr('href') === '#scroll-tab-1') {
-//            alert("SCROLL TAB 1");
-//        }
-//        if ($('a.is-active').attr('href') === '#scroll-tab-2') {
-//            alert("SCROLL TAB 2");
-//        }
-    });
-//    if ($('a.is-active').attr('href') === '#scroll-tab-1') {
-//        alert("SCROLL TAB 1");
-//    }
-//    if ($('a.is-active').attr('href') === '#scroll-tab-2') {
-//        alert("SCROLL TAB 1");
-//    }
+
     var chartGetCandidatesPerMonthId = 'get-candidates-per-month';
     createCandidatesPerMonthChart(chartGetCandidatesPerMonthId);
 
@@ -106,6 +93,7 @@ function createCandidatesPerMonthChart(chartId) {
 
     Highcharts.chart(chartId, {
         chart: {
+            type: "graphType",
 //            zoomType: 'x',
             height: 250,
             style: {
@@ -123,10 +111,6 @@ function createCandidatesPerMonthChart(chartId) {
             y: -10
 //            margin: 0,
         },
-//        subtitle: {
-//            text: document.ontouchstart === undefined ?
-//                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-//        },
         xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {//custom date formats for different scales
@@ -476,7 +460,7 @@ function updateValuetoAjax(key, value) {
 
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
     $('#candidateTable').hide();
-    $('#loader').css('display','block');
+    $('#loader').css('display', 'block');
     $.ajax({
         type: "POST",
         data: {
@@ -487,7 +471,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
         },
         url: "candidateTable.jsp",
         success: function (res) {
-            $('#loader').css('display','none');
+            $('#loader').css('display', 'none');
             $("#candidateTable").html(res);
             $('#candidateTable').show();
             componentHandler.upgradeDom();

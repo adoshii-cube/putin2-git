@@ -1086,6 +1086,11 @@ div .mdl-textfield__label:after {
     margin: 0 auto;
     display: none;
 }
+
+.mdl-layout__drawer p{
+    padding-left: 40px;
+    padding-right: 10px;
+}
 /*AXIS*/
 
 @media screen and (max-width: 767px){

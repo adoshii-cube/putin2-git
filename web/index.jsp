@@ -85,7 +85,10 @@
             </header>
             <div class="mdl-layout__drawer">
                 <span class="mdl-layout-title">INSTRUCTIONS</span>
-
+                <span class="mdl-layout-title">Pie Chart</span>
+                <p>Click on the pie to drill down further by Region and/or Circle</p>
+                <span class="mdl-layout-title">Candidate Table</span>
+                <p>Update one/many dropdowns to view the applicants list</p>
             </div>
             <main class="mdl-layout__content">
                 <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
