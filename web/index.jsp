@@ -231,7 +231,8 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="mdl-grid" id="candidateTable">                    
+                        <div id="loader" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                        <div class="mdl-grid" id="candidateTable">
                             <%
                                 CandidateHelper ch = new CandidateHelper();
                                 List<Candidate> candidateList = ch.getCandidateListByFilter(1, 0, 0, 0);

@@ -6,6 +6,7 @@ selectedRoleId = 0;
 drillDownRegion = "";
 drillDownCircle = "";
 
+text = "";
 $(document).ready(function () {
     $('.mdl-layout__tab').on('click', function () {
 //        if ($('a.is-active').attr('href') === '#scroll-tab-1') {
@@ -105,8 +106,8 @@ function createCandidatesPerMonthChart(chartId) {
 
     Highcharts.chart(chartId, {
         chart: {
-            zoomType: 'x',
-            height: 200,
+//            zoomType: 'x',
+            height: 250,
             style: {
                 fontFamily: 'Roboto'
             },
@@ -117,14 +118,27 @@ function createCandidatesPerMonthChart(chartId) {
         },
         credits: false,
         title: {
-            text: 'Candidate Applications Per Month'
+            text: 'Candidate Applications Per Month',
+            align: 'left',
+            y: -10
+//            margin: 0,
         },
 //        subtitle: {
 //            text: document.ontouchstart === undefined ?
 //                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
 //        },
         xAxis: {
-            type: 'datetime'
+            type: 'datetime',
+            dateTimeLabelFormats: {//custom date formats for different scales
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%e. %b',
+                week: '%e. %b',
+                month: '%b', //month formatted as month only
+                year: '%Y'
+            },
+            tickInterval: 30 * 24 * 3600 * 1000 // interval of 1 day
         },
         yAxis: {
             title: {
@@ -227,7 +241,7 @@ function createLocationCountChart(chartId) {
 
     var chart = new Highcharts.chart(chartId, {
         chart: {
-            height: 310,
+//            height: 310,
             type: 'pie',
             events: {
                 drilldown: function (e) {
@@ -279,7 +293,36 @@ function createLocationCountChart(chartId) {
                         }
                     });
                 },
-                click: function (e) {
+//                click: function (e) {
+//                    
+//                },
+
+                load: function (event) {
+                    var total = 0;
+                    for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                        total += this.series[0].yData[i];
+                    }
+                    text = this.renderer.text(
+                            'Total: ' + total,
+                            this.plotLeft,
+                            this.plotTop - 20
+                            ).attr({
+                        zIndex: 5
+                    }).add();
+                },
+                redraw: function (event) {
+                    var total = 0;
+                    for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                        total += this.series[0].yData[i];
+                    }
+                    text.destroy();
+                    text = this.renderer.text(
+                            'Total: ' + total,
+                            this.plotLeft,
+                            this.plotTop - 20
+                            ).attr({
+                        zIndex: 5
+                    }).add();
                 }
             },
             style: {
@@ -292,7 +335,9 @@ function createLocationCountChart(chartId) {
         },
         credits: false,
         title: {
-            text: defaultTitle
+            text: defaultTitle,
+            align: 'left',
+            y: -10
         },
         xAxis: {
             categories: true
@@ -335,6 +380,13 @@ function createLocationCountChart(chartId) {
 //                size: '80%',
             }
         },
+        legend: {
+            enabled: true,
+            floating: false,
+            verticalAlign: 'bottom',
+            align: 'center',
+            y: 50
+        },
         series: [{
                 name: 'Count',
                 colorByPoint: true,
@@ -358,7 +410,7 @@ function createRoleCountChart(chartId, data, title) {
     var chart = new Highcharts.Chart(chartId, {
         chart: {
             type: 'bar',
-            height: 310,
+//            height: 310,
 //            renderTo: chartId,
             style: {
                 fontFamily: 'Roboto'
@@ -370,10 +422,18 @@ function createRoleCountChart(chartId, data, title) {
         },
         credits: false,
         title: {
-            text: title
+            text: title,
+            align: 'left',
+            y: -10
         },
         xAxis: {
             type: 'category'
+        },
+        yAxis: {
+            title: {
+                enabled: true,
+                text: 'Count'
+            }
         },
         legend: {
             enabled: false
@@ -415,6 +475,8 @@ function updateValuetoAjax(key, value) {
 }
 
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
+    $('#candidateTable').hide();
+    $('#loader').css('display','block');
     $.ajax({
         type: "POST",
         data: {
@@ -425,7 +487,9 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
         },
         url: "candidateTable.jsp",
         success: function (res) {
+            $('#loader').css('display','none');
             $("#candidateTable").html(res);
+            $('#candidateTable').show();
             componentHandler.upgradeDom();
         }
     });

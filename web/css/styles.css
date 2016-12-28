@@ -1060,18 +1060,6 @@ div .mdl-textfield__label:after {
     align-items: center;
 }
 
-#get-candidates-per-month{
-    /*height: 35vh;*/
-    width: 90%;
-    margin: 0 auto;
-}
-
-#get-location-count,
-#get-role-count{
-    /*height: 45vh;*/
-    /*margin: 0 auto;*/
-}
-
 .mdl-data-table td div{
     text-overflow: ellipsis;
     /*display: inline-block;*/
@@ -1091,6 +1079,12 @@ div .mdl-textfield__label:after {
 
 .mdl-data-table tbody tr:hover {
     background-color: #E8EAF6;
+}
+
+.mdl-progress{
+    width: 96%;
+    margin: 0 auto;
+    display: none;
 }
 /*AXIS*/
 
