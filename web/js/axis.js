@@ -95,61 +95,10 @@ function createCandidatesPerMonthChart(chartId) {
     }
 
     Highcharts.chart(chartId, {
-//        chart: {
-//            type: "column",
-//            height: 250,
-//            style: {
-//                fontFamily: 'Roboto'
-//            },
-//            spacingBottom: 45,
-//            spacingTop: 45,
-//            spacingLeft: 15,
-//            spacingRight: 15
-//        },
-//        credits: false,
-//        title: {
-//            text: 'Candidate Applications Per Month',
-//            align: 'left',
-//            y: -10
-//        },
-//        xAxis: {
-//            categories: [
-//                'Jan',
-//                'Feb'
-//            ],
-//            crosshair: true
-//        },
-//        yAxis: {
-//            min: 0,
-//            title: {
-//                text: '# of Applications per month'
-//            }
-//        },
-//        colors: ['#303f9f'],
-//        legend: {
-//            enabled: false
-//        },
-//        tooltip: {
-//            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-//            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-//                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-//            footerFormat: '</table>',
-//            shared: true,
-//            useHTML: true
-//        },
-//        series: [{
-//                type: 'column',
-//                name: 'Tokyo',
-//                data: [49.9, 71.5]
-//            }]
-
-
-
-
-
-
-
-
+        global: {
+            useUTC: false
+//            timezoneOffset: 5 * 60
+        },
         chart: {
             type: "column",
             height: 250,
