@@ -461,6 +461,8 @@ function updateValuetoAjax(key, value) {
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
     $('#candidateTable').hide();
     $('#loader').css('display', 'block');
+    $('form select').prop('disabled', true);
+    $('form select').parent().addClass("is-disabled");
     $.ajax({
         type: "POST",
         data: {
@@ -473,6 +475,8 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
         success: function (res) {
             $('#loader').css('display', 'none');
             $("#candidateTable").html(res);
+            $('form select').removeAttr("disabled");
+            $('form select').parent().removeClass("is-disabled");
             $('#candidateTable').show();
             componentHandler.upgradeDom();
         }
