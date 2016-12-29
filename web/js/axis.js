@@ -87,14 +87,71 @@ function createCandidatesPerMonthChart(chartId) {
     var jsonObj = $.parseJSON(obj);
     var series = [];
 
+    console.log("obj ::: " + obj);
+    console.log("jsonObj ::: " + jsonObj);
+
     for (var i = 0; i < jsonObj.length; i++) {
         series.push([Date.UTC(jsonObj[i].year, jsonObj[i].month, jsonObj[i].day), jsonObj[i].count]);
     }
 
     Highcharts.chart(chartId, {
+//        chart: {
+//            type: "column",
+//            height: 250,
+//            style: {
+//                fontFamily: 'Roboto'
+//            },
+//            spacingBottom: 45,
+//            spacingTop: 45,
+//            spacingLeft: 15,
+//            spacingRight: 15
+//        },
+//        credits: false,
+//        title: {
+//            text: 'Candidate Applications Per Month',
+//            align: 'left',
+//            y: -10
+//        },
+//        xAxis: {
+//            categories: [
+//                'Jan',
+//                'Feb'
+//            ],
+//            crosshair: true
+//        },
+//        yAxis: {
+//            min: 0,
+//            title: {
+//                text: '# of Applications per month'
+//            }
+//        },
+//        colors: ['#303f9f'],
+//        legend: {
+//            enabled: false
+//        },
+//        tooltip: {
+//            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+//            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+//                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+//            footerFormat: '</table>',
+//            shared: true,
+//            useHTML: true
+//        },
+//        series: [{
+//                type: 'column',
+//                name: 'Tokyo',
+//                data: [49.9, 71.5]
+//            }]
+
+
+
+
+
+
+
+
         chart: {
-            type: "graphType",
-//            zoomType: 'x',
+            type: "column",
             height: 250,
             style: {
                 fontFamily: 'Roboto'
@@ -109,7 +166,6 @@ function createCandidatesPerMonthChart(chartId) {
             text: 'Candidate Applications Per Month',
             align: 'left',
             y: -10
-//            margin: 0,
         },
         xAxis: {
             type: 'datetime',
@@ -125,6 +181,7 @@ function createCandidatesPerMonthChart(chartId) {
             tickInterval: 30 * 24 * 3600 * 1000 // interval of 1 day
         },
         yAxis: {
+            min: 0,
             title: {
                 text: '# of Applications per month'
             }
@@ -142,7 +199,7 @@ function createCandidatesPerMonthChart(chartId) {
             enabled: false
         },
         series: [{
-                type: 'column',
+//                type: 'column',
                 name: '# of Applications ',
                 data: series
             }]
@@ -153,18 +210,22 @@ function createLocationCountChart(chartId) {
     var defaultTitle = "Applications by Location";
     var drilldownTitle = "Applications for ";
 
-    Highcharts.getOptions().plotOptions.pie.colors = (function () {
-        var colors = [],
-                base = '#7986CB',
-                i;
+//    Highcharts.getOptions().plotOptions.pie.colors = (function () {
+//        var colors = [],
+//                base = '#7986CB',
+//                i;
+//
+//        for (i = 0; i < 10; i += 1) {
+//            // Start out with a darkened base color (negative brighten), and end
+//            // up with a much brighter color
+//            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+//        }
+//        return colors;
+//    }());
 
-        for (i = 0; i < 10; i += 1) {
-            // Start out with a darkened base color (negative brighten), and end
-            // up with a much brighter color
-            colors.push(Highcharts.Color(base).brighten((i - 3) / 15).get());
-        }
-        return colors;
-    }());
+    Highcharts.setOptions({
+        colors: ['#303F9F', '#0097A7', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
+    });
 
     var regionObj = $('#jArrayRegionCount').val();
     var jsonRegionObj = $.parseJSON(regionObj);
@@ -386,9 +447,9 @@ function createRoleCountChart(chartId, data, title) {
     for (var i = 0; i < data.length; i++) {
         roleSeries.push({"name": data[i].name, "y": data[i].count});
     }
-    Highcharts.setOptions({
-        colors: ['#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
-    });
+//    Highcharts.setOptions({
+//        colors: ['#303F9F', '#1976D2', '#0288D1', '#0097A7', '#00796B', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
+//    });
 
     // Create the chart
     var chart = new Highcharts.Chart(chartId, {
@@ -419,6 +480,7 @@ function createRoleCountChart(chartId, data, title) {
                 text: 'Count'
             }
         },
+        colors: ['#303f9f'],
         legend: {
             enabled: false
         },
@@ -432,7 +494,7 @@ function createRoleCountChart(chartId, data, title) {
         },
         series: [{
                 name: 'Count',
-                colorByPoint: true,
+                colorByPoint: false,
                 data: roleSeries
             }]
     });
