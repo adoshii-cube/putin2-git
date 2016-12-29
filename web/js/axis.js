@@ -87,18 +87,11 @@ function createCandidatesPerMonthChart(chartId) {
     var jsonObj = $.parseJSON(obj);
     var series = [];
 
-    console.log("obj ::: " + obj);
-    console.log("jsonObj ::: " + jsonObj);
-
     for (var i = 0; i < jsonObj.length; i++) {
         series.push([Date.UTC(jsonObj[i].year, jsonObj[i].month, jsonObj[i].day), jsonObj[i].count]);
     }
 
     Highcharts.chart(chartId, {
-        global: {
-            useUTC: false
-//            timezoneOffset: 5 * 60
-        },
         chart: {
             type: "column",
             height: 250,
@@ -117,17 +110,8 @@ function createCandidatesPerMonthChart(chartId) {
             y: -10
         },
         xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: {//custom date formats for different scales
-                second: '%H:%M:%S',
-                minute: '%H:%M',
-                hour: '%H:%M',
-                day: '%e. %b',
-                week: '%e. %b',
-                month: '%b', //month formatted as month only
-                year: '%Y'
-            },
-            tickInterval: 30 * 24 * 3600 * 1000 // interval of 1 day
+            type: 'datetime'
+//            categories: []
         },
         yAxis: {
             min: 0,
@@ -148,7 +132,7 @@ function createCandidatesPerMonthChart(chartId) {
             enabled: false
         },
         series: [{
-//                type: 'column',
+                type: 'column',
                 name: '# of Applications ',
                 data: series
             }]
@@ -173,7 +157,7 @@ function createLocationCountChart(chartId) {
 //    }());
 
     Highcharts.setOptions({
-        colors: ['#303F9F', '#0097A7', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
+        colors: ['#303F9F','#0097A7','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19','#d32f2f','#C2185B','#7B1FA2','#512DA8']
     });
 
     var regionObj = $('#jArrayRegionCount').val();
