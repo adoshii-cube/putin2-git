@@ -110,8 +110,10 @@ function createCandidatesPerMonthChart(chartId) {
             y: -10
         },
         xAxis: {
-            type: 'datetime'
-//            categories: []
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%b \'%y'
+            }
         },
         yAxis: {
             min: 0,
@@ -157,7 +159,7 @@ function createLocationCountChart(chartId) {
 //    }());
 
     Highcharts.setOptions({
-        colors: ['#303F9F','#0097A7','#388E3C','#689F38','#AFB42B','#FBC02D','#FFA000','#F57C00','#E64A19','#d32f2f','#C2185B','#7B1FA2','#512DA8']
+        colors: ['#303F9F', '#0097A7', '#388E3C', '#689F38', '#AFB42B', '#FBC02D', '#FFA000', '#F57C00', '#E64A19', '#d32f2f', '#C2185B', '#7B1FA2', '#512DA8']
     });
 
     var regionObj = $('#jArrayRegionCount').val();
