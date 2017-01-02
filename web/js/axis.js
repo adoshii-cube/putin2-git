@@ -19,67 +19,154 @@ $(document).ready(function () {
     createRoleCountChartOnLoad(chartGetRoleCountId);
 //    createRoleCountChart(chartGetRoleCountId);
 
-    //On Page Load
-    $("select option").each(function () {
-        if ($(this).text() === $("#dropdown_region option:selected").text() ||
-                $(this).text() === $("#dropdown_circle option:selected").text() ||
-                $(this).text() === $("#dropdown_city option:selected").text() ||
-                $(this).text() === $("#dropdown_role option:selected").text()
-                )
-        {
-            $(this).attr("selected", "selected");
+    filterUpdate(null, true);
+
+
+});
+
+function filterUpdate(targetId, onLoad) {
+
+
+    if (onLoad) {
+        $("select").each(function () {
+            var x = $(this)[0].options[0];
+            x.setAttribute("selected", "selected");
+        });
+    } else {
+        $("select option").each(function () {
+            // removing selected for every option for every dropdown
+            $(this).removeAttr("selected");
+            if (targetId === "dropdown_region" && $(this).text().trim() === $("#dropdown_region option:selected").text().trim()) {
+                $(this).attr("selected", "selected");
+                updateDropdown("region", $(this).attr("value"));
+                return true;
+            } else if (targetId === "dropdown_circle" && $(this).text().trim() === $("#dropdown_circle option:selected").text().trim()) {
+                $(this).attr("selected", "selected");
+                updateDropdown("circle", $(this).attr("value"));
+                return true;
+            } else if (targetId === "dropdown_city" && $(this).text().trim() === $("#dropdown_city option:selected").text().trim()) {
+                $(this).attr("selected", "selected");
+                updateDropdown("city", $(this).attr("value"));
+                return true;
+            } else if (targetId === "dropdown_role" && $(this).text().trim() === $("#dropdown_role option:selected").text().trim()) {
+                $(this).attr("selected", "selected");
+                return true;
+            }
+        });
+    }
+}
+
+function updateDropdown(updatedLevel, updatedId) {
+    var jArray = $('#locMasterList').val();
+    var jsonObj = $.parseJSON(jArray);
+    var regionOptions = {};
+    var circleOptions = {};
+    var cityOptions = {};
+    jQuery.each(jsonObj, function (index, value) {
+        if (updatedLevel === "region") {
+            if (value.regionId === Number(updatedId)) {
+                circleOptions[value.circleId] = value.circleName;
+                cityOptions[value.cityId] = value.cityName;
+            }
+        } else if (updatedLevel === "circle") {
+            if (value.circleId === Number(updatedId)) {
+//                regionOptions[value.regionId] = value.regionName;
+                cityOptions[value.cityId] = value.cityName;
+            }
+        } else if (updatedLevel === "city") {
+            if (value.cityId === Number(updatedId)) {
+                regionOptions[value.regionId] = value.regionName;
+                circleOptions[value.circleId] = value.circleName;
+            }
         }
     });
 
+    if (Object.keys(regionOptions).length > 0) {
+        updateDropdownOptions("region", regionOptions);
+    }
+    if (Object.keys(circleOptions).length > 0) {
+        updateDropdownOptions("circle", circleOptions);
+    }
+    if (Object.keys(cityOptions).length > 0) {
+        updateDropdownOptions("city", cityOptions);
+    }
+
+}
+function updateDropdownOptions(type, newOptions) {
+    var dropdown;
+    if (type === "region") {
+        dropdown = $("#dropdown_region");
+    } else if (type === "circle") {
+        dropdown = $("#dropdown_circle");
+    } else if (type === "city") {
+        dropdown = $("#dropdown_city");
+    }
+    dropdown.empty();
+
+    if (type === "circle" || type === "city") {
+        dropdown.append($("<option></option>")
+                .attr("value", 0).text("ALL"));
+    }
+    $.each(newOptions, function (key, value) {
+        dropdown.append($("<option></option>")
+                .attr("value", key).text(value));
+    });
+}
+
+$('select').on('change', function (clickedDropdown) {
+    console.log(clickedDropdown);
+//   $('select option').each(function(){
+    filterUpdate(clickedDropdown.target.id, false);
+//   }) ;
 });
 
 //On dropdown Update - REGION
-$('#dropdown_region').on('change', function () {
-    $("#dropdown_region option").each(function () {
-        $(this).removeAttr("selected");
-        if ($(this).text() === $("#dropdown_region option:selected").text()) {
-            $(this).attr("selected", "selected");
-        }
-    });
-    selectedRegionId = $(this).val();
-    updateValuetoAjax('Region', selectedRegionId);
-});
+//$('#dropdown_region').on('change', function () {
+//    $("#dropdown_region option").each(function () {
+//        $(this).removeAttr("selected");== $("#dropdown_region option:selected").text()
+//        if ($(this).text() === $("#dropdown_region option:selected").text()) {
+//            $(this).attr("selected", "selected");
+//        }
+//    });
+//    selectedRegionId = $(this).val();
+//    updateValuetoAjax('Region', selectedRegionId);
+//});
 
 //On dropdown Update - CIRCLE
-$('#dropdown_circle').on('change', function () {
-    $("#dropdown_circle option").each(function () {
-        $(this).removeAttr("selected");
-        if ($(this).text() === $("#dropdown_circle option:selected").text()) {
-            $(this).attr("selected", "selected");
-        }
-    });
-    selectedCircleId = $(this).val();
-    updateValuetoAjax('Circle', selectedCircleId);
-});
+//$('#dropdown_circle').on('change', function () {
+//    $("#dropdown_circle option").each(function () {
+//        $(this).removeAttr("selected");
+//        if ($(this).text() === $("#dropdown_circle option:selected").text()) {
+//            $(this).attr("selected", "selected");
+//        }
+//    });
+//    selectedCircleId = $(this).val();
+//    updateValuetoAjax('Circle', selectedCircleId);
+//});
 
 //On dropdown Update - CITY
-$('#dropdown_city').on('change', function () {
-    $("#dropdown_city option").each(function () {
-        $(this).removeAttr("selected");
-        if ($(this).text() === $("#dropdown_city option:selected").text()) {
-            $(this).attr("selected", "selected");
-        }
-    });
-    selectedCityId = $(this).val();
-    updateValuetoAjax('City', selectedCityId);
-});
+//$('#dropdown_city').on('change', function () {
+//    $("#dropdown_city option").each(function () {
+//        $(this).removeAttr("selected");
+//        if ($(this).text() === $("#dropdown_city option:selected").text()) {
+//            $(this).attr("selected", "selected");
+//        }
+//    });
+//    selectedCityId = $(this).val();
+//    updateValuetoAjax('City', selectedCityId);
+//});
 
 //On dropdown Update - ROLE
-$('#dropdown_role').on('change', function () {
-    $("#dropdown_role option").each(function () {
-        $(this).removeAttr("selected");
-        if ($(this).text() === $("#dropdown_role option:selected").text()) {
-            $(this).attr("selected", "selected");
-        }
-    });
-    selectedRoleId = $(this).val();
-    updateValuetoAjax('Role', selectedRoleId);
-});
+//$('#dropdown_role').on('change', function () {
+//    $("#dropdown_role option").each(function () {
+//        $(this).removeAttr("selected");
+//        if ($(this).text() === $("#dropdown_role option:selected").text()) {
+//            $(this).attr("selected", "selected");
+//        }
+//    });
+//    selectedRoleId = $(this).val();
+//    updateValuetoAjax('Role', selectedRoleId);
+//});
 
 function createCandidatesPerMonthChart(chartId) {
 

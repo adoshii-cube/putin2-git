@@ -184,7 +184,11 @@
                         Map<Integer, String> circleMaster = mlh.getCircleMasterList();
                         Map<Integer, String> cityMaster = mlh.getCityMasterList();
                         Map<Integer, String> roleMaster = mlh.getRoleMasterList();
+                        List<LocationData> locationMasterList = mlh.getLocationMasterList();
+                        JSONArray locMasterList = new JSONArray(locationMasterList);
+                        String jArrayLocMasterList = locMasterList.toString();
                     %>
+                    <input type="hidden" id="locMasterList" value='<%=jArrayLocMasterList%>'/>
                     <div class="page-content">
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-shadow--3dp">
@@ -205,7 +209,7 @@
                                             <%
                                                 for (Map.Entry<Integer, String> entry : circleMaster.entrySet()) {
                                             %>
-                                            <option value="<%=entry.getKey()%>"  > <%=entry.getValue()%> </option>
+                                            <option value="<%=entry.getKey()%>"  ><%=entry.getValue()%></option>
                                             <% }%>
                                         </select>
                                         <label for="dropdown_circle" class="mdl-selectfield__label">CIRCLE</label>
