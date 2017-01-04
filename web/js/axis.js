@@ -32,17 +32,15 @@ function filterUpdate(targetId, onLoad) {
             var x = $(this)[0].options[0];
             x.setAttribute("selected", "selected");
         });
-    } else {
+    } else if (!onLoad) {
         $("select option").each(function () {
             // removing selected for every option for every dropdown
             $(this).removeAttr("selected");
             if (targetId === "dropdown_region" && $(this).text().trim() === $("#dropdown_region option:selected").text().trim()) {
-                console.log("updating region");
                 $(this).attr("selected", "selected");
                 updateDropdown("region", $(this).attr("value"));
-                return true;
+                return false;
             } else if (targetId === "dropdown_circle" && $(this).text().trim() === $("#dropdown_circle option:selected").text().trim()) {
-                console.log("updating circle");
                 $(this).attr("selected", "selected");
                 updateDropdown("circle", $(this).attr("value"));
 
@@ -55,9 +53,9 @@ function filterUpdate(targetId, onLoad) {
                         $(this).addClass('is-selected');
                     }
                 });
-                return true;
+
+                return false;
             } else if (targetId === "dropdown_city" && $(this).text().trim() === $("#dropdown_city option:selected").text().trim()) {
-                console.log("updating city");
                 $(this).attr("selected", "selected");
                 updateDropdown("city", $(this).attr("value"));
 
@@ -68,6 +66,7 @@ function filterUpdate(targetId, onLoad) {
                 jQuery.each($("#dropdown_region").parent().children('div').eq(1).find("ul li"), function () {
                     if ($(this).text().trim() === selectedRegionName) {
                         $(this).addClass('is-selected');
+                        return false;
                     }
                 });
 
@@ -78,13 +77,15 @@ function filterUpdate(targetId, onLoad) {
                 jQuery.each($("#dropdown_circle").parent().children('div').eq(1).find("ul li"), function () {
                     if ($(this).text().trim() === selectedCircleName) {
                         $(this).addClass('is-selected');
+                        return false;
                     }
                 });
-                return true;
+
+                return false;
             } else if (targetId === "dropdown_role" && $(this).text().trim() === $("#dropdown_role option:selected").text().trim()) {
                 $(this).attr("selected", "selected");
                 selectedRoleId = $(this).attr("value");
-                return true;
+                return false;
             }
         });
         makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
@@ -537,7 +538,6 @@ function createRoleCountChartOnLoad(chartId) {
 }
 
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
-    console.log("makeAjaxRequest ---- regionId ::::  " + regionId + " circleId ::::  " + circleId + " cityId ::::  " + cityId + " roleId ::::  " + roleId);
     $('#candidateTable').hide();
     $('#loader').css('display', 'block');
     $('form select').prop('disabled', true);
@@ -557,7 +557,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
             $('form select').removeAttr("disabled");
             $('form select').parent().removeClass("is-disabled");
             $('#candidateTable').show();
-//            componentHandler.upgradeElements('.mdl-tooltip');
+//            componentHandler.upgradeDom('MaterialTooltip');
         }
     });
 }
