@@ -2,6 +2,8 @@ selectedRegionId = 1;
 selectedCircleId = 0;
 selectedCityId = 0;
 selectedRoleId = 0;
+selectedRegionName = "";
+selectedCircleName = "";
 
 drillDownRegion = "";
 drillDownCircle = "";
@@ -25,8 +27,6 @@ $(document).ready(function () {
 });
 
 function filterUpdate(targetId, onLoad) {
-
-
     if (onLoad) {
         $("select").each(function () {
             var x = $(this)[0].options[0];
@@ -37,22 +37,57 @@ function filterUpdate(targetId, onLoad) {
             // removing selected for every option for every dropdown
             $(this).removeAttr("selected");
             if (targetId === "dropdown_region" && $(this).text().trim() === $("#dropdown_region option:selected").text().trim()) {
+                console.log("updating region");
                 $(this).attr("selected", "selected");
                 updateDropdown("region", $(this).attr("value"));
                 return true;
             } else if (targetId === "dropdown_circle" && $(this).text().trim() === $("#dropdown_circle option:selected").text().trim()) {
+                console.log("updating circle");
                 $(this).attr("selected", "selected");
                 updateDropdown("circle", $(this).attr("value"));
+
+                $("#dropdown_region option[value=" + selectedRegionId + "]").attr("selected", "selected");
+                $("#dropdown_region").parent().children('div').eq(0).find("span").text('');
+                $("#dropdown_region").parent().children('div').eq(0).find("span").text(selectedRegionName);
+                $("#dropdown_region").parent().children('div').eq(1).find("ul li.is-selected").removeClass('is-selected');
+                jQuery.each($("#dropdown_region").parent().children('div').eq(1).find("ul li"), function () {
+                    if ($(this).text().trim() === selectedRegionName) {
+                        $(this).addClass('is-selected');
+                    }
+                });
                 return true;
             } else if (targetId === "dropdown_city" && $(this).text().trim() === $("#dropdown_city option:selected").text().trim()) {
+                console.log("updating city");
                 $(this).attr("selected", "selected");
                 updateDropdown("city", $(this).attr("value"));
+
+                $("#dropdown_region option[value=" + selectedRegionId + "]").attr("selected", "selected");
+                $("#dropdown_region").parent().children('div').eq(0).find("span").text('');
+                $("#dropdown_region").parent().children('div').eq(0).find("span").text(selectedRegionName);
+                $("#dropdown_region").parent().children('div').eq(1).find("ul li.is-selected").removeClass('is-selected');
+                jQuery.each($("#dropdown_region").parent().children('div').eq(1).find("ul li"), function () {
+                    if ($(this).text().trim() === selectedRegionName) {
+                        $(this).addClass('is-selected');
+                    }
+                });
+
+                $("#dropdown_circle option[value=" + selectedCircleId + "]").attr("selected", "selected");
+                $("#dropdown_circle").parent().children('div').eq(0).find("span").text('');
+                $("#dropdown_circle").parent().children('div').eq(0).find("span").text(selectedCircleName);
+                $("#dropdown_circle").parent().children('div').eq(1).find("ul li.is-selected").removeClass('is-selected');
+                jQuery.each($("#dropdown_circle").parent().children('div').eq(1).find("ul li"), function () {
+                    if ($(this).text().trim() === selectedCircleName) {
+                        $(this).addClass('is-selected');
+                    }
+                });
                 return true;
             } else if (targetId === "dropdown_role" && $(this).text().trim() === $("#dropdown_role option:selected").text().trim()) {
                 $(this).attr("selected", "selected");
+                selectedRoleId = $(this).attr("value");
                 return true;
             }
         });
+        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, selectedRoleId);
     }
 }
 
@@ -65,17 +100,38 @@ function updateDropdown(updatedLevel, updatedId) {
     jQuery.each(jsonObj, function (index, value) {
         if (updatedLevel === "region") {
             if (value.regionId === Number(updatedId)) {
+                selectedRegionId = value.regionId;
+                selectedRegionName = value.regionName;
+                selectedCircleId = 0;
+                selectedCircleName = 0;
+                selectedCityId = 0;
+                selectedCityName = 0;
                 circleOptions[value.circleId] = value.circleName;
                 cityOptions[value.cityId] = value.cityName;
             }
         } else if (updatedLevel === "circle") {
             if (value.circleId === Number(updatedId)) {
-//                regionOptions[value.regionId] = value.regionName;
+                selectedRegionId = value.regionId;
+                selectedRegionName = value.regionName;
+                selectedCircleId = value.circleId;
+                selectedCircleName = value.circleName;
+                selectedCityId = 0;
+                selectedCityName = 0;
+                cityOptions[value.cityId] = value.cityName;
+            }
+            if (Number(updatedId) === 0 && selectedRegionId === value.regionId) {
                 cityOptions[value.cityId] = value.cityName;
             }
         } else if (updatedLevel === "city") {
             if (value.cityId === Number(updatedId)) {
-                regionOptions[value.regionId] = value.regionName;
+                selectedRegionId = value.regionId;
+                selectedRegionName = value.regionName;
+                selectedCircleId = value.circleId;
+                selectedCircleName = value.circleName;
+                selectedCityId = value.cityId;
+                selectedCityName = value.cityName;
+            }
+            if (value.regionId === selectedRegionId) {
                 circleOptions[value.circleId] = value.circleName;
             }
         }
@@ -114,59 +170,9 @@ function updateDropdownOptions(type, newOptions) {
 }
 
 $('select').on('change', function (clickedDropdown) {
-    console.log(clickedDropdown);
-//   $('select option').each(function(){
     filterUpdate(clickedDropdown.target.id, false);
-//   }) ;
 });
 
-//On dropdown Update - REGION
-//$('#dropdown_region').on('change', function () {
-//    $("#dropdown_region option").each(function () {
-//        $(this).removeAttr("selected");== $("#dropdown_region option:selected").text()
-//        if ($(this).text() === $("#dropdown_region option:selected").text()) {
-//            $(this).attr("selected", "selected");
-//        }
-//    });
-//    selectedRegionId = $(this).val();
-//    updateValuetoAjax('Region', selectedRegionId);
-//});
-
-//On dropdown Update - CIRCLE
-//$('#dropdown_circle').on('change', function () {
-//    $("#dropdown_circle option").each(function () {
-//        $(this).removeAttr("selected");
-//        if ($(this).text() === $("#dropdown_circle option:selected").text()) {
-//            $(this).attr("selected", "selected");
-//        }
-//    });
-//    selectedCircleId = $(this).val();
-//    updateValuetoAjax('Circle', selectedCircleId);
-//});
-
-//On dropdown Update - CITY
-//$('#dropdown_city').on('change', function () {
-//    $("#dropdown_city option").each(function () {
-//        $(this).removeAttr("selected");
-//        if ($(this).text() === $("#dropdown_city option:selected").text()) {
-//            $(this).attr("selected", "selected");
-//        }
-//    });
-//    selectedCityId = $(this).val();
-//    updateValuetoAjax('City', selectedCityId);
-//});
-
-//On dropdown Update - ROLE
-//$('#dropdown_role').on('change', function () {
-//    $("#dropdown_role option").each(function () {
-//        $(this).removeAttr("selected");
-//        if ($(this).text() === $("#dropdown_role option:selected").text()) {
-//            $(this).attr("selected", "selected");
-//        }
-//    });
-//    selectedRoleId = $(this).val();
-//    updateValuetoAjax('Role', selectedRoleId);
-//});
 
 function createCandidatesPerMonthChart(chartId) {
 
@@ -530,19 +536,8 @@ function createRoleCountChartOnLoad(chartId) {
     createRoleCountChart(chartId, jsonObj, chartCountTitle);
 }
 
-function updateValuetoAjax(key, value) {
-    if (key === 'Region') {
-        makeAjaxRequest(value, selectedCircleId, selectedCityId, selectedRoleId);
-    } else if (key === 'Circle') {
-        makeAjaxRequest(selectedRegionId, value, selectedCityId, selectedRoleId);
-    } else if (key === 'City') {
-        makeAjaxRequest(selectedRegionId, selectedCircleId, value, selectedRoleId);
-    } else if (key === 'Role') {
-        makeAjaxRequest(selectedRegionId, selectedCircleId, selectedCityId, value);
-    }
-}
-
 function makeAjaxRequest(regionId, circleId, cityId, roleId) {
+    console.log("makeAjaxRequest ---- regionId ::::  " + regionId + " circleId ::::  " + circleId + " cityId ::::  " + cityId + " roleId ::::  " + roleId);
     $('#candidateTable').hide();
     $('#loader').css('display', 'block');
     $('form select').prop('disabled', true);
@@ -562,7 +557,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
             $('form select').removeAttr("disabled");
             $('form select').parent().removeClass("is-disabled");
             $('#candidateTable').show();
-            componentHandler.upgradeDom();
+//            componentHandler.upgradeElements('.mdl-tooltip');
         }
     });
 }
