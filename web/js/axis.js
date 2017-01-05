@@ -557,7 +557,7 @@ function makeAjaxRequest(regionId, circleId, cityId, roleId) {
             $('form select').removeAttr("disabled");
             $('form select').parent().removeClass("is-disabled");
             $('#candidateTable').show();
-//            componentHandler.upgradeDom('MaterialTooltip');
+            componentHandler.upgradeDom('MaterialTooltip');
         }
     });
 }
